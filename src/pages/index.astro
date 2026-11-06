@@ -1,0 +1,24 @@
+---
+import Base from "../layouts/Base.astro";
+import "../styles/home.css";
+import Stage from "../components/home/Stage.astro";
+import Seen from "../components/home/Seen.astro";
+import Bento from "../components/home/Bento.astro";
+import Heart from "../components/home/Heart.astro";
+import Architecture from "../components/home/Architecture.astro";
+import Uses from "../components/home/Uses.astro";
+import Cta from "../components/Cta.astro";
+---
+<Base title="Dhiya Labs · Data centre operations that work as one" description="DIL is the system of record for the data centre. Four products, Ayana, Neev, Vitana and Aire, sell, operate, resolve and bill on one record. Design partner places are open." path="/">
+  <Stage />
+  <div class="after">
+    <Seen />
+    <Bento />
+    <Heart />
+    <Architecture />
+    <Uses />
+    <Cta variant="home" heading="Make contact. Map your floor. <span>Run it as one.</span>" sub="Design partner places are open. Bring one hall, your BMS and your CRM, and we'll show you the chain of record on your own floor." />
+  </div>
+  <script is:inline src="/js/home.js"></script>
+  <script is:inline src="/js/sphere.js"></script>
+</Base>

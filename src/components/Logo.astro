@@ -1,0 +1,5 @@
+---
+interface Props { name: string; slug?: string | null; soon?: boolean }
+const { name, slug, soon } = Astro.props;
+---
+<span class="lg">{slug && <img src={`https://cdn.simpleicons.org/${slug}/374078`} alt="" loading="lazy" onerror="this.remove()" />}{name}{soon && <span class="soon">soon</span>}</span>

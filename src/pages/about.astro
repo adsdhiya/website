@@ -1,0 +1,95 @@
+---
+import Base from "../layouts/Base.astro";
+import ContactForm from "../components/ContactForm.astro";
+import Cta from "../components/Cta.astro";
+---
+<Base title="About Dhiya Labs · Twenty years on the data centre floor" description="Dhiya Labs is an operator-founded software company building the system of record for data centres, in stealth with design partners. For investors: get in touch with the founders." path="/about" kind="AboutPage">
+<header class="phero wrap">
+  <div class="copy">
+    <p class="eb" style="color:var(--pd)">About Dhiya Labs</p>
+    <h1>Twenty years on the floor. <span>Now we're building what we always needed.</span></h1>
+    <p class="lede">We have sold the halls, run the halls, taken the 2 a.m. calls and sat through the audit. We are building the system of record we kept wishing someone would.</p>
+    <div class="ctas"><a class="btn" href="#talk">Get in touch →</a><a class="lnk" href="#investors">For investors ↓</a></div>
+  </div>
+  <div class="pimg"><svg class="iso" data-scene="about" aria-hidden="true"></svg><span class="cap">Dhiya · the campus</span></div>
+</header>
+
+<section class="sec"><div class="wrap">
+  <div class="prose">
+    <p><strong>Dhiya Labs is an operator-founded software company for data centres.</strong> Between us we have spent two decades in colocation, hyperscale builds, managed services and cloud: selling capacity, commissioning halls, running NOCs, closing SLA disputes and signing off audits.</p>
+    <p>The industry we grew up in now runs some of the most valuable infrastructure on the planet on a stack that was never designed as one. A BMS that does not know the customer. A CRM that does not know the capacity. A ticketing tool that does not know the rack. A spreadsheet, somewhere, that knows all three and is wrong.</p>
+  </div>
+  <div class="callouts">
+    <div class="co"><b>Five tools. One rack. Five spellings.</b><span>Every operator we have worked with re-keys the same object into a CRM, a DCIM, a BMS, a ticketing tool and a billing sheet.</span></div>
+    <div class="co"><b>Go-live is where the data dies.</b><span>The contract, the drawing and the power path are handed over by email. Months later nobody can say what was promised.</span></div>
+    <div class="co"><b>Audit week is a hunt.</b><span>Exports, inboxes and screenshots, stitched together to prove who approved what, long after the fact.</span></div>
+  </div>
+</div></section>
+
+<section class="sec alt"><div class="wrap">
+  <div class="sh"><h2 class="st">The problem is not the tools. <em>It is the record.</em></h2><p>Each tool is good at its job. None of them is the system of record for the data centre, so each becomes one by accident.</p></div>
+  <div class="pain">
+    <div class="pc"><p class="n">01</p><h3>Record</h3><p>No single object for a rack, a customer or a contract. Every system keeps its own, and they drift.</p></div>
+    <div class="pc"><p class="n">02</p><h3>Handover</h3><p>Sales to build to operations to finance, each step re-typed. The chain breaks at every boundary.</p></div>
+    <div class="pc"><p class="n">03</p><h3>Proof</h3><p>Approvals in email, overrides in memory. The audit pack is reconstructed, not retrieved.</p></div>
+    <div class="pc"><p class="n">04</p><h3>Tooling</h3><p>A generation of DCIM built for the facilities team alone, and ITSM built for IT alone. Neither built for the building as a business.</p></div>
+  </div>
+</div></section>
+
+<section class="sec"><div class="wrap">
+  <div class="sh"><h2 class="st">What we are <em>building.</em></h2><p>In stealth, with a small number of design partners, on live halls.</p></div>
+  <div class="prose">
+    <p><strong>DIL is a lifecycle platform: one record of the data centre</strong> that four products read and write. Ayana sells and bills against it. Neev runs the floor on it. Vitana resolves incidents and changes on it. Aire provisions and meters cloud and GPU tenants on it.</p>
+    <p>It reads the BMS, EPMS, DCIM, ITSM and finance systems operators already run, reconciles them to one ID per object, and links what happens next into a chain: reading, alarm, incident, change, credit. It does not ask anyone to rip anything out on day one.</p>
+  </div>
+  <div class="flow" style="margin-top:40px">
+    <div><b>Sell</b><span>Quote what the floor can carry.</span></div><div><b>Build</b><span>Contract creates the racks and the work.</span></div><div><b>Operate</b><span>Power, cooling, capacity, PPM.</span></div><div><b>Resolve</b><span>One queue for alarm, incident, change.</span></div><div><b>Bill</b><span>Meter to invoice, credits attached.</span></div><div><b>Prove</b><span>Audit packs that assemble themselves.</span></div>
+  </div>
+</div></section>
+
+<section class="sec alt"><div class="wrap">
+  <div class="sh"><h2 class="st">How we <em>work.</em></h2></div>
+  <div class="vals">
+    <div class="val"><p class="n">01</p><h3>Floor first.</h3><p>We design from the rack up, not from the dashboard down. If it does not survive a 2 a.m. incident in Hall 2, it does not ship.</p></div>
+    <div class="val"><p class="n">02</p><h3>Nothing re-keyed.</h3><p>If a human types the same fact twice, we have failed. Every object has one ID and every product references it.</p></div>
+    <div class="val"><p class="n">03</p><h3>Boring where it counts.</h3><p>Strong consistency, attributed writes, full exports. The exciting part is what operators do with a record they can trust.</p></div>
+  </div>
+  <div style="margin-top:56px;display:grid;gap:18px">
+    <p class="eb" style="color:var(--pd)">Who we build for</p>
+    <div class="tags"><span>Colocation operators</span><span>Hyperscale campuses</span><span>Edge & regional DCs</span><span>Neoclouds & GPU hosts</span><span>Managed service providers</span><span>Sovereign & regulated sites</span><span>Facilities teams</span><span>NOC & IT ops</span><span>Sales & finance</span></div>
+  </div>
+</div></section>
+
+<section class="sec"><div class="wrap">
+  <p class="quote about-quote">
+    <span class="about-quote-intro">We have been in the operator's shoes for two decades.</span>
+    <span>We are building the record we kept wishing for,</span>
+    <span>and we are building it quietly, with the people who will run it.</span>
+  </p>
+</div></section>
+
+<section class="sec investor-contact" id="investors"><div class="wrap">
+  <div class="inv">
+    <div class="investor-copy" style="display:grid;gap:16px">
+      <p class="eb" style="color:var(--pd)">For investors</p>
+      <h2>Infrastructure software, built by the people who ran the infrastructure.</h2>
+      <p>We are raising quietly. If you back vertical software with operators behind it, and you would like to see the record running on a live hall, the founding team would like to hear from you.</p>
+      <p style="font-size:14px;color:var(--sub)">Goes straight to the founders at <a href="mailto:founders@dhiya.ai">founders@dhiya.ai</a>. We reply personally. No deck without a conversation first.</p>
+    </div>
+    <ContactForm kind="investor" />
+  </div>
+</section>
+
+
+  <Cta heading="Make contact. Map your floor. <span>Run it as one.</span>" sub="Bring one hall, your BMS and your CRM. We'll show you the chain of record on your own floor, from a reading to the bill." />
+  <script is:inline src="/iso.js"></script>
+</Base>
+<style>
+  .about-quote{width:100%;max-width:none;margin-inline:auto;text-align:center;font-size:clamp(24px,2.45vw,36px);line-height:1.3;text-wrap:balance}
+  .about-quote .about-quote-intro{color:var(--ink)}
+  @media(min-width:960px){.about-quote>span{display:block}}
+  .investor-contact{background:#FFFFFF;color:#250B1E;padding-block:clamp(56px,7vw,88px)}
+  .investor-contact .inv{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(32px,5vw,72px);align-items:center;padding:0;border:0;background:transparent;box-shadow:none}
+  .investor-contact .investor-copy{min-width:0}
+  @media(max-width:800px){.investor-contact .inv{grid-template-columns:minmax(0,1fr);gap:30px}}
+</style>

@@ -1,0 +1,23 @@
+---
+/** Product mock-up windows. Mirrors the spec shapes in src/data/products.ts. */
+import EquipmentScene from "./EquipmentScene.astro";
+const { spec, product } = Astro.props as { spec: any; product?: string };
+const t = spec.type;
+const equipmentVariant = spec.equipment || (product === "neev" && t === "grid" ? "neev" : product === "aire" && t === "cards" && spec.title === "Tenant · Halcyon AI" ? "aire" : undefined);
+const semanticColor = (color: string) => color === "#E9B44C" ? "#83296A" : color === "#C8463B" ? "#A61E4D" : color;
+---
+<div class="mock">
+  <div class="bar"><i></i><i></i><i></i><b>{spec.title}</b>{spec.status && <span class="st2">{spec.status}</span>}</div>
+  <div class="in">
+    {equipmentVariant && <div class="mock-equipment"><EquipmentScene variant={equipmentVariant} id={`mock-equipment-${equipmentVariant}`} /></div>}
+    {t === "table" && <table><thead><tr>{spec.cols.map((c: string) => <th>{c}</th>)}</tr></thead><tbody>{spec.rows.map((row: string[], ri: number) => <tr class={ri === spec.hi ? "hi" : undefined}>{row.map((c: string) => <td set:html={c} />)}</tr>)}</tbody></table>}
+    {t === "kpis" && <div class="kpis">{spec.items.map(([l, v, d]: string[]) => <div class="kpi"><span>{l}</span><b>{v}</b>{d && <em>{d}</em>}</div>)}</div>}
+    {t === "bars" && <div class="bars">{spec.items.map(([l, p, v, c]: any[]) => <div class="brow"><span>{l}</span><div class="tr"><i style={`width:${p}%${c ? ";background:" + semanticColor(c) : ""}`}></i></div><em>{v}</em></div>)}</div>}
+    {t === "timeline" && <div class="tl">{spec.items.map(([tm, k, a, b]: string[]) => <div class="ev"><time>{tm}</time><i class={k}></i><span>{a}{b && <small>{b}</small>}</span></div>)}</div>}
+    {t === "form" && <div class="form">{spec.fields.map(([l, v, live]: any[]) => <div class="fld"><span>{l}</span><b class={live ? "live" : undefined}>{v}</b></div>)}{spec.btn && <div class="fbtn">{spec.btn}</div>}</div>}
+    {t === "cards" && <div class="cards">{spec.items.map(([n, l, b, k]: string[]) => <div class="card"><b>{n}</b><span>{l}</span>{b && <span class={`tag ${k}`}>{b}</span>}</div>)}</div>}
+    {t === "chain" && <><div class="chain">{spec.items.map(([lbl, hi]: any[], i: number) => <>{i > 0 && <i>→</i>}<span class={hi ? "hi" : undefined}>{lbl}</span></>)}</div>{spec.note && <p style="margin-top:12px;font-size:11px;color:#816394">{spec.note}</p>}</>}
+    {t === "grid" && !equipmentVariant && <><div class="grid">{spec.cells.map((c: string) => <i class={c || undefined}></i>)}</div><div class="gl">{spec.legend.map(([l, col]: string[]) => <span><i style={`background:${semanticColor(col)}`}></i>{l}</span>)}</div></>}
+  </div>
+</div>
+<style>.mock-equipment + :global(.cards){margin-top:14px}</style>

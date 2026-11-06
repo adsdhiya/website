@@ -1,0 +1,83 @@
+/* Palette tokens are inherited from global.css, matching the supplied ZIP: Ayana #F6E7E5 / #B03729 / #6A2119; Neev #DDF3F9 / #1F9DBF / #1F6F82; Vitana #E6EBFB / #315ADE / #1D3685; Aire #E9F1F6 / #4E8DB0 / #41657A; DIL #EAE0F0 / #9B5DE5 / #5A1764 (ground / accent / dark). Contact sections retain their white ground and plum form from their own components. */
+/* Product routes: original ZIP palettes, with the current compact layout and working previews. */
+.product-page{--mono:var(--font);font-family:var(--font);background:var(--pt);color:var(--ink)}
+.product-page .phero{grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);gap:clamp(26px,4vw,54px);padding-block:48px 54px;min-height:0}
+.product-page .phero .copy{gap:18px}
+.product-page .phero h1{font-size:clamp(38px,4.8vw,65px);line-height:1.02;max-width:14ch;font-weight:500}
+.product-page .phero .lede{font-size:clamp(16px,1.4vw,18px);line-height:1.55;max-width:45ch}
+.product-page .phero .btn{font-size:14px;min-height:43px;padding-inline:20px}
+.product-page .sec{padding-block:48px}
+.product-page .sh{gap:14px 36px;margin-bottom:30px}
+.product-page .sh .st{font:500 clamp(29px,3.7vw,47px)/1.07 var(--font);letter-spacing:-.035em;max-width:21ch}
+.product-page .sh p{font-size:15px;line-height:1.55;max-width:44ch}
+.product-page .steps{gap:34px}
+.product-page .step{gap:clamp(25px,4vw,48px);grid-template-columns:minmax(0,.94fr) minmax(0,1.06fr)}
+.product-page .step .txt{gap:10px}
+.product-page .step .n,.product-page .hb .n{font-family:var(--font);font-size:11px;letter-spacing:.1em}
+.product-page .step h3{font:500 clamp(23px,2.4vw,31px)/1.1 var(--font);letter-spacing:-.025em}
+.product-page .step .txt>p:not(.n){font-size:15px;line-height:1.6}
+.product-page .step ul{gap:6px;margin-top:3px}
+.product-page .step ul li{font-family:var(--font);font-size:10px;letter-spacing:.035em;padding:4px 9px;text-transform:none}
+.product-page .mock{font-family:var(--font);font-size:12px;border-radius:6px;box-shadow:0 8px 24px #4229370B}
+.product-page .mock .bar{padding:9px 12px;gap:5px}
+.product-page .mock .bar i{width:6px;height:6px}
+.product-page .mock .bar b{font-family:var(--font);font-size:10px;letter-spacing:.025em;text-transform:none;margin-left:5px}
+.product-page .mock .bar .st2{font-size:9px;letter-spacing:.025em;text-transform:none}
+.product-page .mock .in{padding:13px;overflow-x:auto}
+.product-page .mock th{font-family:var(--font);font-size:9px;letter-spacing:.03em;padding:6px 7px;text-transform:none}
+.product-page .mock td{padding:8px 7px;font-size:11px}
+.product-page .mock .tag{font:500 9px var(--font);letter-spacing:.01em;text-transform:none;border-radius:5px;padding:2px 5px}
+.product-page .mock .kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.product-page .mock .kpi{padding:11px;border-radius:5px;box-shadow:none}
+.product-page .mock .kpi span{font-size:9px;text-transform:none;letter-spacing:.025em;margin-bottom:4px}.product-page .mock .kpi b{font-size:23px;font-weight:500}.product-page .mock .kpi em{font-size:10px}
+.product-page .mock .brow{grid-template-columns:115px minmax(0,1fr) 51px;gap:10px}.product-page .mock .brow span{font-size:11px}.product-page .mock .brow .tr{height:6px;border-radius:5px;overflow:hidden}.product-page .mock .brow .tr i{border-radius:5px}.product-page .mock .brow em{font-size:11px}
+.product-page .mock .tl .ev{padding:8px 0;gap:8px}.product-page .mock .tl .ev i{border-radius:50%;width:5px;height:5px}.product-page .mock .tl .ev span{font-size:11px}.product-page .mock .tl .ev span small{font-size:10px}.product-page .mock .tl .ev time{font-size:10px}
+.product-page .mock .form{gap:8px}.product-page .mock .fld{grid-template-columns:100px minmax(0,1fr);gap:9px}.product-page .mock .fld span{font-size:9px;letter-spacing:.02em;text-transform:none}.product-page .mock .fld b{font-size:11px;padding:7px 9px;border-radius:4px}.product-page .mock .fbtn{font-size:10px;letter-spacing:.015em;text-transform:none;padding:7px 12px;border-radius:4px}
+.product-page .mock .cards{gap:8px}.product-page .mock .card{padding:12px;border-radius:5px;box-shadow:none}.product-page .mock .card b{font-size:12px}.product-page .mock .card span{font-size:10px}
+.product-page .mock .chain{font-size:10px;letter-spacing:.02em;text-transform:none;gap:7px}.product-page .mock .chain span{padding:7px 9px;border-radius:4px}.product-page .mock .grid i{border-radius:3px}.product-page .mock .gl{font-size:9px;letter-spacing:.03em;text-transform:none;flex-wrap:wrap}
+.product-page .hood{gap:14px}.product-page .hb{padding:23px 21px;gap:11px;border-radius:6px;box-shadow:0 6px 18px #42293708}.product-page .hb h3{font-size:23px;font-weight:500}.product-page .hb p{font-size:14px;line-height:1.55}.product-page .hb ul{gap:8px}.product-page .hb li{padding-top:8px}.product-page .hb li b{font-size:13px;font-weight:500}.product-page .hb li span{font-size:12px;line-height:1.5}
+.product-page .midcta{margin-top:28px;padding:22px 25px;border-radius:6px;gap:18px}.product-page .midcta p{font-size:14px}.product-page .midcta .btn{font-size:13px;min-height:41px;padding-inline:17px}
+.product-page .ig{gap:14px}.product-page .igc{padding:19px;border-radius:6px;box-shadow:0 6px 18px #42293708}.product-page .igc h3{font-size:16px;font-weight:500}.product-page .igc p{font-size:12px;margin-bottom:12px}.product-page .lgs{gap:6px}.product-page .lg{font-size:11px;padding:6px 9px}.product-page .lg img{width:14px;height:14px}.product-page .lg .soon{font:500 8px var(--font);letter-spacing:.03em;border-radius:4px}.product-page .protos{font:500 10px var(--font);letter-spacing:.04em;gap:7px 14px;margin-top:15px;text-transform:none}
+.product-page .cta{padding-block:65px}.product-page .cta h2{font:500 clamp(32px,3.7vw,48px)/1.08 var(--font);letter-spacing:-.03em}.product-page .cta p{font-size:15px}.product-page .cta .ctaf{gap:38px}.product-page .cf{box-shadow:0 12px 32px #00000015;padding:24px;gap:12px}.product-page .cf label{font-family:var(--font);font-size:10px;letter-spacing:.05em}.product-page .cf input,.product-page .cf select,.product-page .cf textarea{font-size:14px;padding:9px 11px}.product-page .cf .fine{font-size:11px}.product-page .cf .btn{font-size:13px;min-height:41px}
+@media(max-width:860px){.product-page .phero{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px}.product-page .phero h1{font-size:45px}.product-page .phero .lede{font-size:15px}.product-page .step{grid-template-columns:1fr 1fr;gap:26px}.product-page .step:nth-child(even) .txt{order:2}.product-page .hood{grid-template-columns:1fr}.product-page .hb{gap:9px}.product-page .hb ul{grid-template-columns:repeat(3,1fr);gap:16px}.product-page .sh{margin-bottom:25px}.product-page .sh .st{font-size:36px}}
+@media(max-width:760px){.product-page .phero{grid-template-columns:1fr;gap:30px;padding-block:34px 42px}.product-page .phero h1{font-size:clamp(40px,7vw,55px);max-width:17ch}.product-page .phero .copy{gap:16px}.product-page .phero .lede{max-width:52ch}.product-page .phero .ctas{margin-top:1px}.product-page .sec{padding-block:39px}.product-page .steps{gap:31px}.product-page .step{grid-template-columns:1fr;gap:20px}.product-page .step:nth-child(even) .txt{order:0}.product-page .step h3{font-size:26px}.product-page .step .txt>p:not(.n){font-size:14px}.product-page .sh .st{font-size:34px}.product-page .sh p{font-size:14px}.product-page .mock{max-width:600px;width:100%;justify-self:center}.product-page .hb ul{grid-template-columns:1fr;gap:8px}.product-page .cta{padding-block:48px}.product-page .cta .ctaf{gap:28px}.product-page .ig{grid-template-columns:1fr 1fr}.product-page .igc{padding:17px}.product-page .lgs{gap:5px}.product-page .lg{font-size:10px;padding:5px 7px}}
+@media(max-width:480px){.product-page .ig{grid-template-columns:1fr}.product-page .mock .bar{gap:4px}.product-page .mock .bar b{font-size:9px}.product-page .mock .bar .st2{font-size:8px}.product-page .mock .fld{grid-template-columns:83px minmax(0,1fr)}.product-page .mock .brow{grid-template-columns:105px minmax(0,1fr) 45px;gap:7px}.product-page .mock .brow span,.product-page .mock .brow em{font-size:10px}.product-page .phero h1{font-size:43px}.product-page .midcta{padding:21px}.product-page .sh .st{font-size:32px}.product-page .cta h2{font-size:34px}}
+
+/* Preserve the two-column CTA despite the shared .cta .wrap flex rule. */
+.product-page .cta .wrap.ctaf{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);align-items:center;gap:38px;text-align:left}
+.product-page .cta .ctxt{min-width:0;align-items:flex-start;gap:16px}
+.product-page .cta .cta-mark{width:46px;height:46px}
+.product-page .cta .ctxt .eb{font:500 10px var(--font);letter-spacing:.08em}
+.product-page .cta .ctxt h2{max-width:15ch}
+.product-page .cta .ctxt>p:not(.eb){max-width:43ch}
+.product-page .cf{width:100%;min-width:0}
+@media(max-width:860px){.product-page .cta .wrap.ctaf{grid-template-columns:minmax(0,1fr);gap:28px}.product-page .cta .ctxt h2{max-width:21ch}}
+body:has(>main.product-page){background:var(--pt)}
+
+/* Original animated isometric hero objects stay in place; UI previews add context below. */
+.product-page .phero .pimg{aspect-ratio:auto;max-height:none;max-width:620px;width:100%;margin:0;display:flex;flex-direction:column;align-items:center;gap:14px;overflow:visible;--pa:#9B5DE5;--pd:#5A1764}
+.product-page .product-iso-frame{position:relative;width:min(100%,65.6svh);aspect-ratio:800 / var(--iso-floor-y);overflow:visible}
+.product-page .product-iso-frame>svg.iso{inset:0 auto auto 0;width:100%;height:var(--iso-svg-height);overflow:visible;pointer-events:none}
+.product-page .product-hero-caption{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:9px;width:100%;max-width:460px;margin:0;font:500 11px/1.5 var(--font);letter-spacing:.09em;text-transform:uppercase;text-align:center;color:#816394}
+.product-page .product-hero-caption img{width:26px;height:26px;flex:none}.product-page .product-hero-caption span{min-width:0}
+body[data-p=ayana] .product-page .phero .pimg{--pa:var(--ayana-a);--pd:var(--ayana-d)}
+body[data-p=neev] .product-page .phero .pimg{--pa:#1F9DBF;--pd:var(--neev-d)}
+body[data-p=vitana] .product-page .phero .pimg{--pa:var(--vitana-a);--pd:var(--vitana-d)}
+body[data-p=aire] .product-page .phero .pimg{--pa:#4E8DB0;--pd:var(--aire-d)}
+.product-page .product-overview{display:grid;grid-template-columns:minmax(0,1fr);gap:26px;margin-bottom:42px;padding-bottom:34px;border-bottom:1px solid #DCD1D1}
+.product-page .product-overview-copy{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);align-items:end;gap:22px 48px;margin:0}
+.product-page .product-overview-copy .st{max-width:22ch;font-size:clamp(28px,3.1vw,40px)}
+.product-page .product-overview-copy>p{max-width:48ch}
+.product-page .product-overview .product-dashboard{max-width:none;width:100%;justify-self:stretch}
+@media(max-width:860px){.product-page .phero{grid-template-columns:1fr;gap:26px}.product-page .phero .pimg{justify-self:stretch;max-width:none;aspect-ratio:auto;max-height:none;gap:12px}.product-page .product-iso-frame{width:min(80%,48svh)}.product-page .phero h1{max-width:17ch}}
+@media(max-width:760px){.product-page .product-overview{grid-template-columns:1fr;gap:25px;margin-bottom:30px;padding-bottom:28px}.product-page .product-overview-copy{grid-template-columns:1fr;gap:14px}.product-page .product-overview-copy .st{max-width:22ch}.product-page .product-overview-copy>p{max-width:50ch}.product-page .product-overview .product-dashboard{max-width:none;justify-self:stretch}}
+
+/* Physical equipment views have room for a desktop map and its inspector. */
+.product-page .step:has(.mock-equipment){grid-template-columns:minmax(0,1fr);gap:22px}
+.product-page .step:has(.mock-equipment)>.txt{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:start;gap:10px 40px;order:0}
+.product-page .step:has(.mock-equipment)>.txt>.n{grid-column:1;grid-row:1}
+.product-page .step:has(.mock-equipment)>.txt>h3{grid-column:1;grid-row:2;max-width:24ch}
+.product-page .step:has(.mock-equipment)>.txt>p:not(.n){grid-column:2;grid-row:1/3;max-width:58ch}
+.product-page .step:has(.mock-equipment)>.txt>ul{grid-column:2}
+.product-page .step:has(.mock-equipment)>.mock{width:100%;max-width:none;justify-self:stretch}
+@media(max-width:760px){.product-page .step:has(.mock-equipment)>.txt{display:flex;flex-direction:column;gap:10px}.product-page .step:has(.mock-equipment){gap:18px}}

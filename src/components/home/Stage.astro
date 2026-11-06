@@ -1,0 +1,42 @@
+---
+const scenes = [
+  { tag: 'Hall 2 · 400 kW', alt: 'Two open server structures in a meadow, illustrating available data centre capacity.' },
+  { tag: 'Phase B · Ready for service', alt: 'A pair of white server racks with cyan activation waves, illustrating a new phase going live.' },
+  { tag: 'CRAH-07 · +1.8 °C', alt: 'A row of cooling towers with one tilted unit and a warm vent, illustrating cooling drift.' },
+  { tag: 'INC-2041 · 40 → 1', alt: 'Amber alarm beacons converging on one cyan tower, illustrating many signals linked to one incident.' },
+  { tag: 'Rack 2B-14 · 38 kW', alt: 'A GPU rack with blue cooling tubes beneath a small rain cloud, illustrating thermal management.' },
+];
+---
+<div class="stage">
+  <div class="media" aria-hidden="true">
+    <!-- Neutral meadow footage carries the hero and the operational story. -->
+    <video id="bgv" autoplay muted playsinline preload="auto" poster="/media/hero-meadow-rack.jpg" onerror="this.remove()" data-seg="0.3,14.8" data-k="0" data-anchor="0.5,0.5" data-fade="4" data-top="0" data-zoom="1.24">
+      <source src="/media/hero-slow.mp4" type="video/mp4" onerror="this.parentNode.remove()">
+    </video>
+    <canvas id="bgc" aria-hidden="true"></canvas>
+  </div>
+
+  <header class="hero wrap" id="top">
+    <h1><span class="hero-line">Data centre operations</span> <span class="hero-line hero-accent">that work as one.</span></h1>
+    <div class="ctas"><a class="btn" href="#talk">Talk to us →</a></div>
+  </header>
+
+
+  <section class="lines" id="lines" aria-label="What Dhiya keeps track of">
+    <div class="pin">
+      <ol>
+        <li data-i="0" class="on"><span class="dot" style="background:var(--ayana-a)"></span>The power left to sell in Hall 2.</li>
+        <li data-i="1"><span class="dot" style="background:var(--neev-a)"></span>The day Phase B goes live.</li>
+        <li data-i="2"><span class="dot" style="background:var(--neev-a)"></span>The cooling unit drifting on row C.</li>
+        <li data-i="3"><span class="dot" style="background:var(--vitana-a)"></span>The one incident behind forty alarms.</li>
+        <li data-i="4"><span class="dot" style="background:var(--aire-a)"></span>The GPUs running hot on rack 2B-14.</li>
+      </ol>
+      {scenes.map((scene, i) => (
+        <figure class:list={['shot', i % 2 === 0 ? 'l' : 'r', { on: i === 0 }]} data-i={i} aria-hidden={i !== 0}>
+          <figcaption class="tag">{scene.tag}</figcaption>
+          <div class="frame"><img src={`/media/line-${i + 1}.jpg`} width="1280" height="960" loading={i === 0 ? 'eager' : 'lazy'} alt={scene.alt} /></div>
+        </figure>
+      ))}
+    </div>
+  </section>
+</div>

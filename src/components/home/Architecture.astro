@@ -1,0 +1,154 @@
+<!-- Architecture restored from the supplied dhiya-site-html ZIP. -->
+<section class="architecture-reference" id="architecture" aria-label="How the platform is put together">
+  <div class="wrap">
+    <div class="head">
+      <h2>Architecture</h2>
+      <p class="sub">One record underneath. Four products on top. Your existing systems plugged in at the edges, not ripped out.</p>
+    </div>
+    <div class="agrid">
+
+      <div class="panel prod">
+        <p class="pt">Four products, one record</p>
+        <p class="ps">Each product reads and writes the same objects. Nothing is copied between them.</p>
+        <div class="pgrid">
+          <div class="box pr" style="--bc:var(--ayana-a)"><div class="hd"><img src="/media/logos/ayana-mark_on-chalk.svg" alt=""><b>Ayana</b></div><p>Accounts, contracts, metered usage, invoices and revenue.</p><p class="for">Sell · sales, finance</p></div>
+          <div class="box pr" style="--bc:var(--neev-a)"><div class="hd"><img src="/media/logos/neev-mark_on-chalk.svg" alt=""><b>Neev</b></div><p>Racks, power, cooling, capacity and the work on the floor.</p><p class="for">Operate · facilities, DC ops</p></div>
+          <div class="box pr" style="--bc:var(--vitana-a)"><div class="hd"><img src="/media/logos/vitana-mark_on-chalk.svg" alt=""><b>Vitana</b></div><p>Monitoring, incidents, changes and runbooks.</p><p class="for">Resolve · NOC, IT ops</p></div>
+          <div class="box pr" style="--bc:var(--aire-a)"><div class="hd"><img src="/media/logos/aire-mark_on-chalk.svg" alt=""><b>Aire</b></div><p>Cloud and GPU tenants: provision, meter, bill.</p><p class="for">Compute · cloud teams, tenants</p></div>
+        </div>
+      </div>
+
+      <div class="arr" aria-hidden="true">
+        <svg viewBox="0 0 14 44" preserveAspectRatio="none"><line x1="7" y1="0" x2="7" y2="38"/><path d="M3 34 L7 40 L11 34"/></svg>
+        <svg viewBox="0 0 14 44" preserveAspectRatio="none"><line x1="7" y1="0" x2="7" y2="38"/><path d="M3 34 L7 40 L11 34"/></svg>
+        <svg viewBox="0 0 14 44" preserveAspectRatio="none"><line x1="7" y1="0" x2="7" y2="38"/><path d="M3 34 L7 40 L11 34"/></svg>
+        <svg viewBox="0 0 14 44" preserveAspectRatio="none"><line x1="7" y1="0" x2="7" y2="38"/><path d="M3 34 L7 40 L11 34"/></svg>
+      </div>
+
+      <div class="panel shared">
+        <p class="pt">Shared by all four</p>
+        <p class="ps">What every product needs and none should own alone.</p>
+        <div class="list">
+          <div class="it"><b>Incidents &amp; changes</b><p>One queue. Raised from an alarm, a customer or a planned job; closed with the credit it caused.</p></div>
+          <div class="it"><b>Approvals &amp; audit</b><p>Every approval, override and edit kept, with who and when.</p></div>
+          <div class="it"><b>Roles &amp; access</b><p>Single sign-on, per-tenant isolation, customer views that show only their floor.</p></div>
+          <div class="it"><b>Reports &amp; API</b><p>Dashboards, scheduled reports and a documented API over the same record.</p></div>
+        </div>
+      </div>
+
+      <div class="panel core">
+        <img class="heartmark" src="/media/dhiya-mark-ink.svg" alt="">
+        <p class="pt">DIL · the record</p>
+        <p class="ps">The system of record for the data centre. One ID per object, kept for life.</p>
+        <div class="rec">
+          <span>Site</span><span>Hall</span><span>Rack</span><span>Power path</span><span>Asset</span><span>Reading</span><span>Alarm</span><span>Customer</span><span>Contract</span><span>Ticket</span><span>Change</span><span>Credit</span><span class="id">One ID each</span>
+        </div>
+        <div class="chain"><span>Chain of record</span><i>→</i><span>Reading</span><i>→</i><span>Alarm</span><i>→</i><span>Incident</span><i>→</i><span>Change</span><i>→</i><span>Credit</span><em>Linked from the sensor to the bill</em></div>
+        <div class="g3"><div>Multi-tenant<br>by design</div><div>Strongly<br>consistent</div><div>Every write<br>attributed</div></div>
+        <div class="obj">
+          <div class="oh"><span class="eb">One object · all its links</span><b>Rack 2B-14</b><span class="oid">ID kept for life</span></div>
+          <div class="orow"><span>Hall</span><em>Hall 2 · Site A · row B</em><i style="--c:var(--neev-a)"></i></div>
+          <div class="orow"><span>Power path</span><em>PDU 2B-07 → UPS B → Feeder 2</em><i style="--c:var(--neev-a)"></i></div>
+          <div class="orow"><span>Customer</span><em>Northwind Cloud</em><i style="--c:var(--ayana-a)"></i></div>
+          <div class="orow"><span>Contract</span><em>NW-117 · 8 kW committed · metered</em><i style="--c:var(--ayana-a)"></i></div>
+          <div class="orow"><span>Open ticket</span><em>INC-20417 · inlet temperature high</em><i style="--c:var(--vitana-a)"></i></div>
+          <div class="orow"><span>Last change</span><em>CHG-5531 · approved · 09:14</em><i style="--c:var(--vitana-a)"></i></div>
+          <div class="orow"><span>Tenant</span><em>GPU pod 4 · 12 nodes · metered</em><i style="--c:var(--aire-a)"></i></div>
+          <div class="olg"><span><i style="background:var(--neev-a)"></i>Neev</span><span><i style="background:var(--ayana-a)"></i>Ayana</span><span><i style="background:var(--vitana-a)"></i>Vitana</span><span><i style="background:var(--aire-a)"></i>Aire</span><span>· who writes the field</span></div>
+        </div>
+      </div>
+
+      <div class="panel conn">
+        <p class="pt">Connectors</p>
+        <p class="ps">Reads from what you already run. Each has an owner, a mapping and a mismatch report.</p>
+        <div class="list">
+          <div class="it"><span class="eb">Building</span><b>BMS</b><p>Cooling, environment, alarms.</p></div>
+          <div class="it"><span class="eb">Power</span><b>EPMS</b><p>Meters, breakers, UPS, gensets.</p></div>
+          <div class="it"><span class="eb">Inventory</span><b>DCIM</b><p>Assets, racks, cabling.</p></div>
+          <div class="it"><span class="eb">Tickets</span><b>ITSM</b><p>ServiceNow, Jira and the like.</p></div>
+          <div class="it"><span class="eb">Money</span><b>ERP / finance</b><p>Invoices out, payments back.</p></div>
+          <div class="it"><span class="eb">People</span><b>Identity</b><p>SSO, directories, roles.</p></div>
+        </div>
+      </div>
+
+      <div class="arr2" aria-hidden="true"><svg viewBox="0 0 14 44" preserveAspectRatio="none"><line x1="7" y1="0" x2="7" y2="38"/><path d="M3 34 L7 40 L11 34"/></svg></div>
+
+      <div class="panel run">
+        <p class="pt">Runs where you need it</p>
+        <p class="ps">Deployed to suit the site, not the other way round.</p>
+        <div class="pgrid c3">
+          <div class="box"><b>Your cloud or ours</b><p>Hosted by us, in your cloud account, or on the floor for air-gapped sites.</p></div>
+          <div class="box"><b>Encrypted end to end</b><p>At rest and in transit, with keys you can hold.</p></div>
+          <div class="box"><b>Yours to take</b><p>Full exports on demand. No lock-in on the record.</p></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+/* Keep the ZIP reference independent of later page-wide theme overrides. */
+.architecture-reference{--lilac:#EAE0F0;--ink:#221A21;--ayana-a:#B03729;--neev-a:#3EC6E8;--vitana-a:#315ADE;--aire-a:#6CA9CB;--font:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;font:17px/1.55 var(--font)}
+/* ===== Architecture ===== */
+@property --architecture-angle{syntax:'<angle>';inherits:false;initial-value:0deg}
+.architecture-reference{background:var(--lilac);color:var(--ink);padding-block:clamp(72px,9vw,120px)}
+.architecture-reference .head{display:flex;flex-wrap:wrap;gap:16px 48px;align-items:flex-end;justify-content:space-between;margin:0 0 40px}
+.architecture-reference h2{font:500 clamp(34px,4.6vw,64px)/1 var(--mono);letter-spacing:-.03em;margin:0;color:var(--ink)}
+.architecture-reference .sub{font-size:clamp(15px,1.3vw,18px);line-height:1.45;color:#654B75;max-width:44ch;margin:0}
+.agrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.1fr) minmax(0,1fr);grid-template-areas:"prod prod prod" "arr arr arr" "shared core conn" "arr2 arr2 arr2" "run run run";gap:0 18px}
+.panel{position:relative;background:#fff;padding:clamp(18px,2.4vw,30px);border:1px solid #C8B1D6;--pa:#9B5DE5;min-width:0}
+.panel::before{content:"";position:absolute;inset:-1px;padding:1px;pointer-events:none;background:conic-gradient(from var(--architecture-angle),transparent 0 62%,var(--pa) 80%,transparent 86% 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:spin 9s linear infinite}
+.panel.core::before{animation-duration:7s}.panel.shared::before{animation-delay:-3s}.panel.conn::before{animation-delay:-5s}.panel.run::before{animation-delay:-2s}
+@keyframes spin{to{--architecture-angle:360deg}}
+.panel .pt{font:500 clamp(16px,1.5vw,20px) var(--mono);letter-spacing:-.01em;color:var(--pa);margin:0 0 4px}
+.panel .ps{font-size:12.5px;line-height:1.45;color:#816394;margin:0 0 18px;font-family:var(--mono)}
+.panel.prod{grid-area:prod}.panel.shared{grid-area:shared;--pa:#654B75}.panel.core{grid-area:core;--pa:#C8463B}.panel.conn{grid-area:conn;--pa:#374078}.panel.run{grid-area:run;--pa:#654B75}
+.pgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.pgrid.c3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.box{background:#F4ECF6;border:1px solid #DCCDE3;padding:16px 16px 14px;min-width:0;position:relative}
+.box b{display:block;font:500 15px var(--mono);letter-spacing:-.01em;color:var(--ink);margin:0 0 6px}
+.box p{margin:0;font-size:13px;line-height:1.5;color:#654B75}
+.box.pr{border-top:2px solid var(--bc)}.box.pr .hd{display:flex;align-items:center;gap:10px;margin-bottom:8px}.box.pr .hd img{width:26px;height:26px}.box.pr .hd b{margin:0}
+.box.pr .for{margin-top:12px;font:500 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#816394}
+.list{display:flex;flex-direction:column;gap:0}
+.list .it{padding:12px 0;border-top:1px solid #E6DAEA}.list .it:last-child{border-bottom:1px solid #E6DAEA}
+.list .it b{display:block;font:500 14px var(--mono);letter-spacing:-.01em;color:var(--ink);margin:0 0 3px}
+.list .it p{margin:0;font-size:12.5px;line-height:1.45;color:#654B75}
+.list .it .eb{font:500 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#816394;display:block;margin-bottom:2px}
+/* side panels point into the core */
+.panel.shared::after,.panel.conn::after{content:"→";position:absolute;top:50%;transform:translateY(-50%);font:500 14px var(--mono);color:#9B86A3;background:var(--lilac);padding:2px 3px;z-index:2}
+.panel.shared::after{right:-17px}.panel.conn::after{left:-17px;content:"←"}
+.core .rec{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.core .rec span{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink);border:1px solid #C8B1D6;padding:7px 10px;background:#F4ECF6}
+.core .rec span.id{color:#C8463B;border-color:#EBB8B1;background:#FBEAE8}
+.core .chain{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#654B75;padding:14px 16px;background:#F4ECF6;border:1px solid #DCCDE3}
+.core .chain i{color:#C8463B;font-style:normal}
+.core .chain em{font-style:normal;color:#816394;width:100%;letter-spacing:.06em}
+.core .g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:16px}
+.core .g3 div{font:500 10.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#654B75;border-left:2px solid #C8463B;padding:2px 0 2px 10px;line-height:1.4}
+.core .heartmark{position:absolute;right:clamp(18px,2.4vw,30px);top:clamp(18px,2.4vw,30px);width:34px;height:34px;opacity:.9}
+.arr{grid-area:arr;height:44px;display:grid;grid-template-columns:repeat(4,1fr)}.arr2{grid-area:arr2;height:44px;display:flex;justify-content:center}
+.arr svg,.arr2 svg{height:100%;width:14px;overflow:visible;justify-self:center}
+.arr line,.arr2 line{stroke:#9B86A3;stroke-width:1;stroke-dasharray:3 4;animation:dash 1.2s linear infinite}
+.arr path,.arr2 path{fill:none;stroke:#9B86A3;stroke-width:1}
+@keyframes dash{to{stroke-dashoffset:-14}}
+@media (max-width:1000px){.agrid{grid-template-columns:1fr;grid-template-areas:"prod" "arr" "shared" "core" "conn" "arr2" "run"}.pgrid{grid-template-columns:1fr 1fr}.panel.shared,.panel.core{margin-bottom:18px}.panel.shared::after,.panel.conn::after{display:none}.arr{grid-template-columns:1fr}.arr svg:not(:first-child){display:none}.list{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}.list .it:last-child{border-bottom:0}.list .it:nth-last-child(2){border-bottom:0}}
+@media (max-width:560px){.pgrid,.pgrid.c3,.list{grid-template-columns:1fr}.core .g3{grid-template-columns:1fr}.list .it:nth-last-child(2){border-bottom:1px solid #E6DAEA}}
+.panel.shared,.panel.conn,.panel.core{display:flex;flex-direction:column}
+.panel.shared .list,.panel.conn .list{flex:1}.list .it{flex:1;display:flex;flex-direction:column;justify-content:center}
+.core .obj{margin-top:auto;padding-top:18px}
+.core .obj .oh{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 14px;margin:0 0 10px}
+.core .obj .oh .eb{font:500 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#816394;width:100%}
+.core .obj .oh b{font:500 18px var(--mono);letter-spacing:-.02em;color:var(--ink)}
+.core .obj .oh .oid{font:500 11px var(--mono);letter-spacing:.06em;color:#C8463B}
+.core .orow{display:grid;grid-template-columns:110px 1fr 10px;gap:12px;align-items:center;padding:7px 0;border-top:1px solid #E6DAEA;font-size:12.5px}
+.core .orow:last-child{border-bottom:1px solid #E6DAEA}
+.core .orow span{font:500 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#816394}
+.core .orow em{font-style:normal;color:var(--ink);font-family:var(--mono);font-size:12px;letter-spacing:-.01em;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.core .orow i{width:8px;height:8px;background:var(--c);display:block}
+.core .olg{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font:500 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#816394}
+.core .olg i{display:inline-block;width:8px;height:8px;margin-right:6px;vertical-align:0}
+@media (max-width:560px){.core .orow{grid-template-columns:90px 1fr 10px}}
+@media (prefers-reduced-motion:reduce){.panel::before,.arr line,.arr2 line{animation:none}}
+</style>

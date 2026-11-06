@@ -1,0 +1,110 @@
+---
+import { site } from "../data/site";
+import brandLockup from "../../public/media/dhiya-lockup-ink.svg?raw";
+// Use the brand's Hanken outlines and exact star: no font fallback or dot on the i.
+const [wordmarkPath, starPath] = Array.from(brandLockup.matchAll(/<path d="([^"]+)"/g), ([, path]) => path);
+const wordmarkTransform = "translate(-562 -66) scale(2.75)";
+// Isometric rack rows and shared aisles, clipped into the exact brand lettering.
+const iso = (x: number, z: number, y = 0) => `${(330+(x-z)*.866).toFixed(2)},${(210+(x+z)*.39-y).toFixed(2)}`;
+const line = (a: string, b: string) => `M${a}L${b}`;
+let floorGrid = "";
+for(let x=-380;x<=380;x+=76) floorGrid+=line(iso(x,-180),iso(x,180));
+for(let z=-180;z<=180;z+=60) floorGrid+=line(iso(-380,z),iso(380,z));
+const floorRacks: string[]=[];
+for(let row=0;row<3;row++) for(let col=0;col<9;col++) {
+  const x=-310+col*76,z=-150+row*120,w=26,d=38,h=42;
+  let rack=`M${iso(x,z)}L${iso(x+w,z)}L${iso(x+w,z+d)}L${iso(x,z+d)}Z`;
+  rack+=`M${iso(x,z,h)}L${iso(x+w,z,h)}L${iso(x+w,z+d,h)}L${iso(x,z+d,h)}Z`;
+  [[x,z],[x+w,z],[x+w,z+d],[x,z+d]].forEach(([a,b])=>rack+=line(iso(a,b),iso(a,b,h)));
+  [12,23,34].forEach(y=>rack+=line(iso(x,z,y),iso(x+w,z,y)));
+  floorRacks.push(rack);
+}
+const floorRoutes = [
+  `M${iso(-380,-180)}L${iso(380,-180)}L${iso(380,-60)}L${iso(-380,-60)}L${iso(-380,60)}L${iso(380,60)}L${iso(380,180)}L${iso(-380,180)}`,
+  `M${iso(-310,-180)}L${iso(-310,180)}L${iso(-82,180)}L${iso(-82,-180)}L${iso(146,-180)}L${iso(146,180)}L${iso(374,180)}`,
+];
+---
+<footer id="company"><div class="wrap">
+  <div class="footer-main">
+    <div class="footer-navigation">
+      <a class="footer-brand" href="/" aria-label="Dhiya home"><img src="/media/dhiya-lockup-ink.svg" alt="Dhiya" width="145" height="48" /></a>
+      <div class="cols">
+    <div><b>Platform</b><a href="/dil">DIL</a><a href="/#platform">The record</a><a href="/#architecture">Architecture</a><a href="/#uses">Use cases</a></div>
+    <div><b>Products</b><a href="/ayana">Ayana</a><a href="/neev">Neev</a><a href="/vitana">Vitana</a><a href="/aire">Aire</a></div>
+    <div><b>Company</b><a href="/about">About</a><a href="/about#investors">Investors</a><a href="#talk">Contact</a><a href={`mailto:${site.mail}`}>{site.mail}</a></div>
+      </div>
+    </div>
+  <div class="footer-wordmark" data-footer-art data-motion="paused" aria-hidden="true">
+    <svg viewBox="0 0 665 360" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <clipPath id="footer-dhiya-letters"><path d={wordmarkPath} transform={wordmarkTransform} clip-rule="evenodd" /></clipPath>
+        <clipPath id="footer-dhiya-star"><path d={starPath} transform={wordmarkTransform} /></clipPath>
+        <linearGradient id="footer-letter-depth" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#92749F" /><stop offset=".48" stop-color="#73547F" /><stop offset="1" stop-color="#50375C" /></linearGradient>
+        <linearGradient id="footer-floor-fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="white" stop-opacity="0" /><stop offset=".28" stop-color="white" stop-opacity=".6" /><stop offset=".55" stop-color="white" /><stop offset="1" stop-color="white" stop-opacity=".12" /></linearGradient>
+        <mask id="footer-floor-mask"><rect width="665" height="360" fill="url(#footer-floor-fade)" /></mask>
+      </defs>
+      <g clip-path="url(#footer-dhiya-letters)">
+        <rect width="665" height="360" fill="url(#footer-letter-depth)" />
+        <g mask="url(#footer-floor-mask)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d={floorGrid} stroke="#C8B1D6" stroke-width=".65" opacity=".24" />
+          {floorRacks.map(rack=><path d={rack} stroke="#D7C4E1" stroke-width=".9" opacity=".62" />)}
+          {floorRoutes.map((route,i)=><g style={`--route-delay:${i ? '-12s' : '0s'}`}>
+            <path d={route} stroke="#B89CC8" stroke-width=".9" opacity=".2" />
+            <path class="footer-iso-flow footer-iso-glow" d={route} pathLength="1000" stroke="#D4BCE3" stroke-width="6" />
+            <path class="footer-iso-flow" d={route} pathLength="1000" stroke="#E1CDEF" stroke-width="1.5" />
+          </g>)}
+        </g>
+      </g>
+      <path class="footer-brand-star" d={starPath} transform={wordmarkTransform} fill="#E9B44C" />
+      <g clip-path="url(#footer-dhiya-star)"><rect class="footer-star-glint" x="280" y="0" width="13" height="125" fill="#FFF1CD" /></g>
+    </svg>
+    <p>One floor. One record. One Dhiya.</p>
+  </div>
+  </div>
+  <div class="base"><span>© {new Date().getFullYear()} {site.name}</span><span class="legal-links"><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/security">Security</a></span></div>
+</div></footer>
+<style>
+  footer{position:relative;isolation:isolate;background:var(--ink,#221A21);border-radius:0;overflow:hidden;padding-block:32px 22px}
+  .footer-main{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,360px);gap:clamp(32px,6vw,76px);align-items:center}
+  .footer-navigation{min-width:0}
+  footer .cols{display:grid;grid-template-columns:1fr 1fr 1.15fr;gap:22px;align-items:start}
+  .footer-brand{display:block;width:max-content;margin-bottom:20px}
+  .footer-brand img{height:48px;width:auto;display:block}
+  footer .cols div{gap:8px;font-size:13px;line-height:1.4}
+  footer .cols b{font-size:12px;margin-bottom:3px;color:#F5EDF6}
+  footer .cols a{transition:color .2s}
+  footer .cols a:hover{color:#E9D8F1}
+  .footer-wordmark{max-width:360px;width:100%;margin:0;overflow:hidden;justify-self:end}
+  .footer-wordmark svg{display:block;width:100%;height:auto;max-height:195px;overflow:visible}
+  .footer-wordmark p{font:400 9px var(--mono);letter-spacing:.08em;text-transform:uppercase;text-align:center;color:#B89CC8;max-width:none;margin:9px 0 0}
+  .footer-iso-flow{stroke-dasharray:120 880;stroke-dashoffset:0;animation:footer-isometric-flow 24s linear infinite;animation-delay:var(--route-delay);animation-play-state:paused;opacity:.85}
+  .footer-iso-glow{opacity:.12}
+  .footer-star-glint{opacity:0;animation:footer-star-glint 12s ease-in-out infinite;animation-play-state:paused}
+  .footer-wordmark[data-motion="running"] .footer-iso-flow,.footer-wordmark[data-motion="running"] .footer-star-glint{animation-play-state:running}
+  footer .base{margin-top:24px;padding-top:16px;font-size:11px;line-height:1.5;color:#BCAFC8}
+  footer .legal-links a{text-decoration:none;transition:color .2s}
+  footer .legal-links a:hover{color:#E9D8F1;text-decoration:underline}
+  @keyframes footer-isometric-flow{to{stroke-dashoffset:-1000}}
+  @keyframes footer-star-glint{0%,72%{transform:translateX(0);opacity:0}77%{opacity:.7}87%{transform:translateX(140px);opacity:0}100%{transform:translateX(140px);opacity:0}}
+  @media(max-width:900px){.footer-main{grid-template-columns:minmax(0,1fr) 300px;gap:28px}footer .cols{gap:16px}footer .cols div{font-size:12px}}
+  @media(max-width:760px){footer{padding-block:28px 20px;border-radius:0}.footer-main{grid-template-columns:1fr;gap:24px}.footer-brand{margin-bottom:20px}.footer-wordmark{max-width:260px;justify-self:center}.footer-wordmark svg{max-height:142px}footer .cols{gap:20px}footer .base{margin-top:22px}}
+  @media(max-width:420px){footer .cols{grid-template-columns:1fr 1fr;gap:22px 18px}.footer-wordmark{max-width:230px}.footer-wordmark p{font-size:8px}}
+  @media(prefers-reduced-motion:reduce){.footer-iso-flow,.footer-star-glint{animation:none}.footer-iso-flow{stroke-dashoffset:-180;opacity:.45}.footer-iso-glow,.footer-star-glint{opacity:0}}
+</style>
+
+<script is:inline>
+(function(){
+  document.querySelectorAll('[data-footer-art]').forEach(function(art){
+    if(art.dataset.motionReady)return;
+    art.dataset.motionReady='true';
+    var visible=false,reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+    function sync(){art.dataset.motion=visible&&!document.hidden&&!reduced.matches?'running':'paused';}
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(function(entries){visible=entries[0].isIntersecting;sync();},{threshold:.05}).observe(art);
+    }else{visible=true;}
+    document.addEventListener('visibilitychange',sync);
+    reduced.addEventListener('change',sync);
+    sync();
+  });
+})();
+</script>

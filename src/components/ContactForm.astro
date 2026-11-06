@@ -1,0 +1,58 @@
+---
+/** Basic-details form. kind="partner" goes to hi@, kind="investor" to founders@. Posts to /api/contact; forms.js falls back to mailto if the endpoint is missing. */
+import { site } from "../data/site";
+interface Props { kind?: "partner" | "investor"; button?: string; variant?: "default" | "home" | "partner" }
+const { kind = "partner", button = kind === "investor" ? "Reach the founders →" : "Talk to us →", variant = "default" } = Astro.props;
+const to = kind === "investor" ? site.investors : site.mail;
+---
+<form class:list={["cf", "cf-plum", { "cf-home": variant === "home" }]} data-kind={kind} data-to={to} data-endpoint={site.endpoint} novalidate>
+  <input type="text" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+  {kind === "investor" ? (
+    <>
+      <div class="row2"><label>Name<input name="name" required autocomplete="name"></label><label>Firm<input name="firm" required autocomplete="organization"></label></div>
+      <div class="row2"><label>Email<input type="email" name="email" required autocomplete="email"></label><label>You back<select name="stage"><option>Pre-seed · Seed</option><option>Series A and later</option><option>Strategic · corporate</option><option>Angel</option></select></label></div>
+      <label>Anything we should know?<textarea name="message" rows="3" maxlength="600" placeholder="Thesis, timing, how you found us"></textarea></label>
+    </>
+  ) : (
+    <>
+      <div class="row2"><label>Name<input name="name" required autocomplete="name"></label><label>Work email<input type="email" name="email" required autocomplete="email"></label></div>
+      <div class="row2"><label>Company<input name="company" required autocomplete="organization"></label><label>Role<input name="role" autocomplete="organization-title" placeholder="Optional"></label></div>
+      <div class="row2"><label>You run<select name="segment"><option>Colocation</option><option>Hyperscale · enterprise</option><option>Neocloud · GPU</option><option>Managed services</option><option>Something else</option></select></label><label>Capacity<select name="capacity"><option>Under 2 MW</option><option>2–10 MW</option><option>10–50 MW</option><option>50 MW and up</option></select></label></div>
+      <label>Anything we should know?<textarea name="message" rows="3" maxlength="600" placeholder="Optional · the tools you run, the hall you'd start with"></textarea></label>
+    </>
+  )}
+  <div class="act"><button class="btn" type="submit">{button}</button><p class="fine">We reply personally. Nothing goes on a list. <a href="/privacy">Privacy</a></p></div>
+  <p class="ok" role="status" aria-live="polite" hidden>Thanks. We'll write to <b data-echo></b> within two working days.</p>
+  <p class="err" role="alert" hidden>That didn't send. Email us directly at <a href={`mailto:${to}`}>{to}</a>.</p>
+</form>
+<style>
+  .cf{width:100%;min-width:0}
+  .cf .row2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cf label{min-width:0}
+  .cf [hidden]{display:none!important}
+  @media(max-width:520px){.cf .row2{grid-template-columns:minmax(0,1fr)}}
+  .cf.cf-plum{width:100%;min-width:0;display:grid;gap:14px;padding:clamp(22px,2.8vw,34px);border:1px solid #422339;border-radius:6px;background:#250B1E;color:#FFF9FE;color-scheme:dark;box-shadow:0 14px 36px rgba(37,11,30,.12);text-align:left}
+  .cf.cf-plum .row2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .cf.cf-plum label{min-width:0;gap:6px;color:#E3CFE0;font:500 10px/1.4 var(--mono);letter-spacing:.08em}
+  .cf.cf-plum input,.cf.cf-plum select,.cf.cf-plum textarea{background:#35182D;color:#FFF9FE;caret-color:#E8D6EF;border:1px solid #715068;border-radius:6px;padding:10px 11px;font-size:14px;line-height:1.4;box-shadow:inset 0 1px 2px rgba(0,0,0,.1)}
+  .cf.cf-plum input::placeholder,.cf.cf-plum textarea::placeholder{color:#BFAAC0;opacity:1}
+  .cf.cf-plum select{padding-right:30px;background-image:linear-gradient(45deg,transparent 50%,#D9C4DF 50%),linear-gradient(135deg,#D9C4DF 50%,transparent 50%);background-position:calc(100% - 17px) 50%,calc(100% - 12px) 50%;background-size:5px 5px;background-repeat:no-repeat}
+  .cf.cf-plum option{background:#35182D;color:#FFF9FE}
+  .cf.cf-plum textarea{min-height:72px;max-height:200px}
+  .cf.cf-plum input:focus,.cf.cf-plum select:focus,.cf.cf-plum textarea:focus{outline:2px solid #B89CC8;outline-offset:3px;border-color:#B89CC8;box-shadow:none}
+  .cf.cf-plum .bad{border-color:#EB9D8E;box-shadow:0 0 0 3px rgba(235,157,142,.3)}
+  .cf.cf-plum input.bad:focus,.cf.cf-plum select.bad:focus,.cf.cf-plum textarea.bad:focus{border-color:#EB9D8E;outline-color:#EB9D8E;box-shadow:0 0 0 3px rgba(235,157,142,.3)}
+  .cf.cf-plum input:-webkit-autofill{ -webkit-text-fill-color:#FFF9FE!important;caret-color:#E8D6EF;box-shadow:0 0 0 1000px #35182D inset!important}
+  .cf.cf-plum input:autofill{background:#35182D;color:#FFF9FE;box-shadow:0 0 0 1000px #35182D inset!important}
+  .cf.cf-plum .act{display:flex;align-items:center;gap:14px;margin-top:2px;flex-wrap:wrap}
+  .cf.cf-plum .btn{min-height:42px;padding:0 19px;background:#B89CC8;border-color:#B89CC8;color:#250B1E;font-size:14px;white-space:nowrap}
+  .cf.cf-plum .btn:hover{background:#CDB5DA;border-color:#CDB5DA}
+  .cf.cf-plum .btn:focus-visible{outline-color:#EEDFF3;outline-offset:4px}
+  .cf.cf-plum .fine{flex:1 1 160px;color:#CEB6C9;font-size:11px;line-height:1.5;max-width:26ch}
+  .cf.cf-plum .fine a{color:inherit;text-underline-offset:2px}
+  .cf.cf-plum .ok,.cf.cf-plum .err{color:#FFF9FE;font-size:15px;line-height:1.6;max-width:none}
+  .cf.cf-plum .ok b,.cf.cf-plum .err a{color:#D6B8E6}
+  .cf.cf-plum.sent{align-content:center;min-height:240px}
+  .cf.cf-plum.sent>:not(.ok){display:none}
+  @media(max-width:480px){.cf.cf-plum .row2{grid-template-columns:minmax(0,1fr)}.cf.cf-plum{padding:24px 20px}.cf.cf-plum .fine{max-width:none}}
+</style>

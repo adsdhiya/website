@@ -1,0 +1,84 @@
+<section class="seen seen-band" data-seen aria-label="Your kilowatts, megawatts and gigawatts. Seen in action. Everything, everywhere, all at once.">
+  <div class="seen-in wrap" aria-hidden="true">
+    <p>Your <span class="word-group power-word"><span class="type power-type" data-words="Kilowatts|Megawatts|Gigawatts" data-colors="#5662A6|#AE7C26|#83296A">Kilowatts</span><span class="caret"></span></span></p>
+    <p>Seen in action.</p>
+    <p><span class="word-group quiet-word"><span class="type" data-words="Everything|Everywhere|All">Everything</span><span class="caret"></span></span> at once.</p>
+  </div>
+</section>
+<style>
+  .seen.seen-band{position:relative;min-height:90svh;display:flex;align-items:center;justify-content:center;text-align:center;background:#FFFFFF;color:#221A21;padding-block:96px;overflow:visible}
+  .seen.seen-band::before{content:"";position:absolute;left:0;right:0;bottom:100%;height:45vh;background:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.55) 55%,#FFFFFF 100%);pointer-events:none}
+  .seen.seen-band .seen-in{position:relative;width:100%;display:grid;justify-items:center;gap:6px;opacity:0;transform:translateY(40px);transition:opacity .9s ease,transform .9s ease}
+  .seen.seen-band.in .seen-in{opacity:1;transform:none}
+  .seen.seen-band p{margin:0;max-width:none;white-space:nowrap;font:600 clamp(34px,4.6vw,72px)/1.04 var(--font);letter-spacing:-.04em}
+  .seen.seen-band .word-group{display:inline;--word-color:#765D80;color:var(--word-color)}
+  .seen.seen-band .power-word{--word-color:#5662A6}
+  .seen.seen-band .type{color:var(--word-color);transition:color .25s}
+  .seen.seen-band .caret{display:inline-block;width:.06em;height:.82em;vertical-align:-.06em;margin-left:.06em;background:currentColor;animation:seen-blink 1s steps(1) infinite}
+  .seen.seen-band .quiet-word{--word-color:#765D80}
+  @keyframes seen-blink{50%{opacity:0}}
+  @media(max-width:560px){.seen.seen-band p{white-space:normal}}
+  @media(prefers-reduced-motion:reduce){.seen.seen-band .seen-in{opacity:1;transform:none;transition:none}.seen.seen-band .type{transition:none}.seen.seen-band .caret{animation:none;display:none}}
+</style>
+<script>
+  const statement = document.querySelector<HTMLElement>('[data-seen]');
+  if (statement) {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let visible = !('IntersectionObserver' in window);
+    const writers = Array.from(statement.querySelectorAll<HTMLElement>('[data-words]')).map((element, offset) => {
+      const words = element.dataset.words!.split('|');
+      const colors = element.dataset.colors?.split('|');
+      let index = 0;
+      let count = words[0].length;
+      let deleting = true;
+      let timer: number | undefined;
+      function colour() {
+        if (colors) element.parentElement!.style.setProperty('--word-color', colors[index]);
+      }
+      function complete() {
+        window.clearTimeout(timer);
+        timer = undefined;
+        count = words[index].length;
+        deleting = true;
+        element.textContent = words[index];
+        colour();
+      }
+      function step() {
+        if (reduced.matches || !visible || document.hidden) { complete(); return; }
+        if (deleting) {
+          count = Math.max(0, count - 1);
+          element.textContent = words[index].slice(0, count);
+          if (count === 0) {
+            index = (index + 1) % words.length;
+            deleting = false;
+            colour();
+            timer = window.setTimeout(step, 160);
+          } else timer = window.setTimeout(step, 35);
+        } else {
+          count = Math.min(words[index].length, count + 1);
+          element.textContent = words[index].slice(0, count);
+          if (count === words[index].length) {
+            deleting = true;
+            timer = window.setTimeout(step, 2400);
+          } else timer = window.setTimeout(step, 65);
+        }
+      }
+      function sync() {
+        complete();
+        if (!reduced.matches && visible && !document.hidden) timer = window.setTimeout(step, 2400 + offset * 650);
+      }
+      return { sync, complete };
+    });
+    function sync() {
+      if (visible || reduced.matches) statement!.classList.add('in');
+      writers.forEach((writer) => writer.sync());
+    }
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((entries) => { visible = entries[0].isIntersecting; sync(); }, { threshold: .1 }).observe(statement);
+    }
+    reduced.addEventListener('change', sync);
+    document.addEventListener('visibilitychange', sync);
+    window.addEventListener('pagehide', () => writers.forEach((writer) => writer.complete()));
+    sync();
+  }
+</script>

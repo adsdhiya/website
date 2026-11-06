@@ -1,0 +1,164 @@
+---
+import EquipmentScene from "./EquipmentScene.astro";
+interface Props { slug: string }
+const { slug } = Astro.props;
+const views: Record<string, { name: string; area: string; title: string; sub: string; kpis: string[][]; note: string; object: string }> = {
+  ayana: { name: "Ayana", area: "Accounts / Northwind", title: "Revenue, tied to the floor.", sub: "Northwind Cloud · Contract NW-117", kpis: [["Live racks", "24", "Hall 2"], ["Committed", "192 kW", "On the record"], ["Invoice", "$23.1k", "November"]], note: "Capacity checked with Neev", object: "NW-117" },
+  neev: { name: "Neev", area: "Sites / Site A / Hall 2", title: "Every rack. In context.", sub: "Hall 2 · Power, cooling and capacity", kpis: [["IT load", "1.42 MW", "of 1.8 MW"], ["Headroom", "118 kW", "Feeder 2"], ["PUE", "1.38", "24-hour view"]], note: "Readings linked to the rack", object: "rk_2b14" },
+  vitana: { name: "Vitana", area: "Operations / Incidents", title: "One incident. Every link.", sub: "INC-20417 · Rack 2B-14 · Northwind", kpis: [["Priority", "P1", "Inlet high"], ["Breach", "38 min", "SLA evidence"], ["Credit", "$1,120", "Linked to Ayana"]], note: "Change and credit attached", object: "INC-20417" },
+  aire: { name: "Aire", area: "Tenants / Halcyon AI", title: "Compute, on the floor.", sub: "Pod 4 · Hall 3 · Contract HA-204", kpis: [["GPUs", "96", "12 nodes"], ["Utilisation", "87%", "Pod 4"], ["Power", "404 kW", "of 420 kW"]], note: "Usage metered into Ayana", object: "HA-204" },
+  dil: { name: "DIL", area: "Record / Hall 2 / Rack 2B-14", title: "One object. All its links.", sub: "rk_2b14 · A single, persistent identity", kpis: [["Objects", "48,212", "Shared record"], ["Mismatches", "16", "To reconcile"], ["Last export", "02:00", "Your data"]], note: "Four products. One record.", object: "rk_2b14" },
+};
+const view = views[slug] || views.dil;
+const mark = slug === "dil" ? "/media/dhiya-mark-ink.svg" : `/media/${slug}-mark.svg`;
+const racks = ["a","a","a","a","a","","","a","a","a","a","w","a","a","a","a","a","a","","","","a","a","a","a","a","a","a","b","a","a","a","a","a","a","a","","","","","","","","","a","a","a","a","a","a","a","a","a","w","w","a","a","a","a","a"];
+const invoiceRows = [
+  { title: "Rack space · 24 racks", amount: "$5,280", copy: "24 racks on contract NW-117 at $220 per rack per month. The invoice points to the same rack objects as Neev.", meta: "Source: Ayana contract NW-117" },
+  { title: "Committed power · 192 kW", amount: "$15,210", copy: "Committed capacity is billed against Northwind’s contract. The power commitment stays linked to Hall 2.", meta: "Source: contract · committed power" },
+  { title: "Overage + cross-connects", amount: "$3,758", copy: "$258 of metered overage plus $3,500 for 14 cross-connects. Metered and fixed charges share one invoice.", meta: "Sources: Neev meter + Ayana contract" },
+  { title: "SLA credit · INC-20417", amount: "− $1,120", copy: "The resolved incident carries a $1,120 SLA credit onto this invoice. Toggle the credit to compare the sample total.", meta: "Source: Vitana incident INC-20417" },
+];
+const timeline = [
+  { time: "09:02", title: "Inlet alarm → incident opened", sub: "Rack 2B-14 · Northwind attached", state: "critical", copy: "EcoStruxure reported 41.2 °C at rack 2B-14. Vitana attached Northwind, contract NW-117 and the SLA to INC-20417.", meta: "Evidence: sensor reading · 41.2 °C" },
+  { time: "09:14", title: "CHG-5531 approved", sub: "Facilities · reason and window kept", state: "", copy: "Facilities approved the CRAH C3 set-point change. M. Keller’s approval and the 09:30–10:30 change window remain attached.", meta: "Evidence: approval · M. Keller · CHG-5531" },
+  { time: "09:48", title: "Inlet clearing · 27.4 °C", sub: "Same rack. Same customer.", state: "steady", copy: "The inlet reading fell to 27.4 °C. The recovery reading stays on the same incident, rack and customer record.", meta: "Evidence: recovery reading · 27.4 °C" },
+  { time: "10:40", title: "Resolved and signed off", sub: "38-minute breach · credit queued", state: "steady", copy: "The team signed off the incident with a 38-minute SLA breach. Ayana reads the attached $1,120 credit for Northwind’s invoice.", meta: "Evidence: resolution + credit · NW-2026-11" },
+];
+const objectRows = [
+  { label: "Location", value: "Hall 2 · Site A", product: "neev", copy: "Rack 2B-14 belongs to Hall 2, Site A. Neev’s floor view and every other product read this same location.", meta: "Owner: Neev · object rk_2b14" },
+  { label: "Power path", value: "Feeder 2 → PDU 2B-07", product: "neev", copy: "The rack’s power path joins its feeder and PDU to the asset. Alarms and capacity checks follow these relationships.", meta: "Owner: Neev · feeder and PDU relationships" },
+  { label: "Customer", value: "Northwind · NW-117", product: "ayana", copy: "Northwind’s account and contract NW-117 are attached to this rack, so billing and incidents share the customer context.", meta: "Owner: Ayana · contract NW-117" },
+  { label: "Incident", value: "INC-20417 · inlet high", product: "vitana", copy: "The inlet-temperature incident points directly to rk_2b14, its power path and its affected customer.", meta: "Owner: Vitana · incident INC-20417" },
+  { label: "Change", value: "CHG-5531 · approved", product: "vitana", copy: "The approved change stays attached to the incident and rack, including the approver and change window.", meta: "Owner: Vitana · approved change CHG-5531" },
+];
+const nodeUtilisation = [91,88,84,89,85,90,86,83,88,87,85,88];
+const nodePower = [35,34,32,35,33,35,33,32,34,34,33,34];
+const rackStates: Record<string,string> = { a: "Live", w: "Reserved", b: "Alarm", "": "Available" };
+const rackVisualStates = { a: "live", w: "reserved", b: "alarm", "": "available" } as const;
+const initialDetails: Record<string,{title:string;copy:string;meta:string}> = {
+  ayana: { title: invoiceRows[0].title, copy: invoiceRows[0].copy, meta: invoiceRows[0].meta },
+  neev: { title: "Rack 2B-14 · Alarm", copy: "Inlet temperature is 41.2 °C. Incident INC-20417 connects this rack to Northwind and the cooling response.", meta: "Hall 2 · Neev → Vitana" },
+  vitana: { title: "09:02 · " + timeline[0].title, copy: timeline[0].copy, meta: timeline[0].meta },
+  aire: { title: "GPU-01 · 8 GPUs", copy: "This sample node belongs to Halcyon AI’s Pod 4 in Hall 3. Usage rolls up to contract HA-204 through the shared record.", meta: "Utilisation 91% · power 35 kW · tenant Halcyon AI" },
+  dil: { title: "Location · Hall 2 · Site A", copy: objectRows[0].copy, meta: objectRows[0].meta },
+};
+const detail = initialDetails[slug] || initialDetails.dil;
+const detailId = `product-preview-detail-${slug}`;
+
+---
+<figure class="product-dashboard" data-product={slug} data-product-demo aria-label={`${view.name} product interface preview`}>
+  <div class="pd-window">
+    <div class="pd-topbar"><span class="pd-brand"><img src={mark} alt="" width="23" height="23" />{view.name}</span><span class="pd-top-location">{view.area}</span><span class="pd-avatar">D</span></div>
+    <div class="pd-workspace">
+      <div class="pd-rail" aria-hidden="true"><span class="pd-rail-brand">DIL</span><i></i><i></i><i></i><span class="pd-rail-foot">ONE RECORD</span></div>
+      <div class="pd-main">
+        <div class="pd-main-header">
+        <div class="pd-page-heading"><div><h2>{view.title}</h2><p>{view.sub}</p></div><span class="pd-date">NOV 2026</span></div>
+        <div class="pd-kpis">{view.kpis.map(([label,value,note], index) => <div><span>{label}</span><b data-kpi={index}>{value}</b><small>{note}</small></div>)}</div>
+        </div>
+        <div class="pd-content">
+        <div class="pd-primary">
+        {slug === "ayana" && <>
+          <div class="pd-panel">
+            <div class="pd-panel-heading"><b>Invoice breakdown</b><span class="pd-status steady" data-invoice-status>Credit included</span></div>
+            {invoiceRows.map((row, i) => <button type="button" class:list={["pd-invoice-row", "pd-select", { "pd-credit": i === 3 }]} data-detail-title={row.title} data-detail-copy={row.copy} data-detail-meta={row.meta} data-credit-row={i === 3 ? "true" : undefined} aria-pressed={i === 0} aria-controls={detailId}><span>{row.title}</span><b>{row.amount}</b></button>)}
+            <div class="pd-invoice-total"><button type="button" class="pd-mini-control" data-credit-toggle aria-pressed="true">Include SLA credit</button><b><span data-invoice-total>$23,128</span> <small>USD</small></b></div>
+          </div>
+          <div class="pd-note"><span class="pd-check">✓</span><span><b>118 kW of headroom</b> · checked against Feeder 2</span><span>↗</span></div>
+        </>}
+        {slug === "neev" && <>
+          <div class="pd-panel pd-floor-panel">
+            <div class="pd-panel-heading"><b>Hall 2 / rack map</b><span class="pd-status">52U racks</span></div>
+            <div class="pd-filter-controls" role="group" aria-label="Filter rack positions"><button type="button" data-rack-filter="all" aria-pressed="true">All</button><button type="button" data-rack-filter="b" aria-pressed="false">Alarm</button><button type="button" data-rack-filter="w" aria-pressed="false">Reserved</button><span data-rack-count>60 positions</span></div>
+            <div class="pd-board-viewport" data-board-viewport>
+            <div class="pd-floor-map pd-equipment-board" data-preview-grid role="group" aria-label="Choose a rack to inspect. Scroll the floor or use the arrow keys to move between racks.">{racks.map((state, index) => {
+              const name = index === 28 ? "Rack 2B-14" : `Position ${String(index + 1).padStart(2, "0")}`;
+              const copy = state === "b" ? initialDetails.neev.copy : state === "w" ? "This position is reserved. The hold stays visible to sales and facilities on the same floor record." : state === "a" ? "This rack position is live. Its asset, power path and customer links are shared with the rest of the platform." : "This position is available. A quote still needs power and cooling headroom checked before capacity is reserved.";
+              return <button type="button" class={`pd-rack pd-select ${state}`} data-rack-state={state} data-detail-title={`${name} · ${rackStates[state]}`} data-detail-copy={copy} data-detail-meta={`Hall 2 · ${rackStates[state]} · shared floor record`} aria-label={`${name}: ${rackStates[state]}`} aria-pressed={index === 28} aria-controls={detailId} tabindex={index === 28 ? 0 : -1}><span class="pd-equipment-object"><EquipmentScene objectOnly="rack" state={rackVisualStates[state as keyof typeof rackVisualStates]} /></span><span class="pd-rack-label">{index === 28 ? "2B-14" : String(index + 1).padStart(2,"0")}</span>{index === 28 && <b aria-hidden="true">!</b>}</button>;
+            })}</div>
+            </div>
+            <p class="pd-board-hint">Scroll the floor · select a rack to inspect</p>
+            <div class="pd-legend"><span><i></i>Live</span><span><i class="reserved"></i>Reserved</span><span><i class="alarm"></i>Alarm</span><span><i class="free"></i>Available</span></div>
+          </div>
+          <div class="pd-note attention"><span class="pd-check">!</span><span><b>Rack 2B-14</b> · inlet 41.2 °C · incident attached</span><span>↗</span></div>
+        </>}
+        {slug === "vitana" && <>
+          <div class="pd-panel">
+            <div class="pd-panel-heading"><b>Incident timeline</b><span class="pd-status steady">Resolved</span></div>
+            {timeline.map((event, i) => <button type="button" class="pd-event pd-select" data-detail-title={`${event.time} · ${event.title}`} data-detail-copy={event.copy} data-detail-meta={event.meta} aria-pressed={i === 0} aria-controls={detailId}><time>{event.time}</time><i class={event.state}></i><span><b>{event.title}</b><small>{event.sub}</small></span></button>)}
+          </div>
+          <div class="pd-note"><span class="pd-check">↗</span><span><b>Sensor → ticket → credit</b> · one chain of record</span><span>✓</span></div>
+        </>}
+        {slug === "aire" && <>
+          <div class="pd-panel">
+            <div class="pd-panel-heading"><b>Pod 4 / GPU nodes</b><span class="pd-status steady">12 nodes live</span></div>
+            <div class="pd-board-viewport pd-gpu-viewport" data-board-viewport>
+            <div class="pd-nodes pd-equipment-board" data-preview-grid role="group" aria-label="Choose a GPU node to inspect. Scroll the pod or use the arrow keys to move between nodes.">{Array.from({ length: 12 }, (_, i) => <button type="button" class="pd-select" data-detail-title={`GPU-${String(i + 1).padStart(2,"0")} · 8 GPUs`} data-detail-copy={initialDetails.aire.copy} data-detail-meta={`Utilisation ${nodeUtilisation[i]}% · power ${nodePower[i]} kW · tenant Halcyon AI`} aria-pressed={i === 0} aria-controls={detailId} tabindex={i === 0 ? 0 : -1}><span>GPU-{String(i + 1).padStart(2,"0")}</span><span class="pd-equipment-object"><EquipmentScene objectOnly="gpu" state="live" /></span><small>{nodeUtilisation[i]}% utilised</small></button>)}</div>
+            </div>
+            <div class="pd-filter-controls" role="group" aria-label="Choose pod meter"><button type="button" data-meter="power" aria-pressed="true">Power</button><button type="button" data-meter="utilisation" aria-pressed="false">GPU utilisation</button></div>
+            <div class="pd-usage" aria-live="polite" aria-atomic="true"><span data-meter-label>Committed power</span><b data-meter-value>404 / 420 kW</b><div role="meter" aria-label="Committed power used" aria-valuemin="0" aria-valuemax="420" aria-valuenow="404" data-meter-bar><i></i></div></div>
+          </div>
+          <div class="pd-note"><span class="pd-check">✓</span><span><b>61,440 GPU hours</b> · on the tenant’s invoice</span><span>↗</span></div>
+        </>}
+        {slug === "dil" && <>
+          <div class="pd-panel">
+            <div class="pd-panel-heading"><b>Rack 2B-14</b><span class="pd-status steady">One ID</span></div>
+            {objectRows.map((row, i) => <button type="button" class="pd-object-row pd-select" data-detail-title={`${row.label} · ${row.value}`} data-detail-copy={row.copy} data-detail-meta={row.meta} aria-pressed={i === 0} aria-controls={detailId}><span>{row.label}</span><b>{row.value}</b><i class={row.product}></i></button>)}
+          </div>
+          <div class="pd-note"><span class="pd-check">↔</span><span><b>2B-14 · R2B14 · Rack 2B/14</b> → one object</span></div>
+        </>}
+        </div>
+        <aside class="pd-selection" id={detailId} aria-live="polite" aria-atomic="true" aria-label="Selected record details">
+          <span class="pd-selection-eyebrow">Selected record</span>
+          <h3 data-preview-title>{detail.title}</h3>
+          <p data-preview-copy>{detail.copy}</p>
+          <span class="pd-selection-meta" data-preview-meta>{detail.meta}</span>
+        </aside>
+        </div>
+      </div>
+    </div>
+    <div class="pd-statusbar"><span><i></i>{view.note}</span><span>{view.object}</span></div>
+  </div>
+  <figcaption><span>Interactive preview · sample data</span><span>Select a record to explore</span></figcaption>
+</figure>
+<style>
+.product-dashboard{--ui-blue:#5662A6;--ui-lilac:#B89CC8;--ui-plum:#250B1E;--ui-muted:#654B75;--ui-line:#DCD1D1;margin:0;width:100%;max-width:1200px;min-width:0;font-family:var(--font);color:var(--ui-plum)}
+.pd-window{background:#FFFFFF;border:1px solid var(--ui-line);border-radius:6px;overflow:hidden;box-shadow:0 14px 36px #4229370D,0 2px 7px #42293706}
+.pd-topbar{display:flex;align-items:center;gap:18px;min-height:50px;padding:11px 20px;border-bottom:1px solid #EAE0F0;background:#FFFFFF}
+.pd-brand{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600;white-space:nowrap;letter-spacing:-.02em}.pd-brand img{width:24px;height:24px}
+.pd-top-location{flex:1;font-size:11px;color:var(--ui-muted)}.pd-avatar{display:grid;place-items:center;width:25px;height:25px;border:1px solid #D9C8E4;border-radius:4px;color:#654B75;background:#F6F1F9;font-size:10px}
+.pd-workspace{display:grid;grid-template-columns:46px minmax(0,1fr)}
+.pd-rail{display:flex;flex-direction:column;align-items:center;gap:15px;padding:20px 6px;border-right:1px solid #EAE0F0;background:#F6F1F9}
+.pd-rail-brand{font:600 9px var(--font);letter-spacing:.04em;color:#654B75}.pd-rail i{display:block;width:15px;height:4px;background:#C8B1D6;border-radius:2px}.pd-rail i:nth-of-type(2){background:#5662A6}.pd-rail-foot{writing-mode:vertical-rl;font:500 8px var(--font);letter-spacing:.12em;color:#816394;margin-top:auto}
+.pd-main{padding:20px;min-width:0}.pd-main-header{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.25fr);gap:24px;align-items:center;margin-bottom:18px}
+.pd-page-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;min-width:0}.pd-page-heading h2{font-size:clamp(17px,1.65vw,22px);font-weight:600;letter-spacing:-.03em;line-height:1.2;text-wrap:initial}.pd-page-heading p{font-size:11px;line-height:1.5;color:var(--ui-muted);margin-top:7px;max-width:none}.pd-date{font:500 9px var(--font);white-space:nowrap;color:#816394;margin-top:4px}
+.pd-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;min-width:0}.pd-kpis>div{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:4px 8px;padding:11px 12px;border:1px solid #DCD1D1;border-radius:4px;background:#FFFFFF;min-width:0}.pd-kpis>div:first-child{border-color:#C5CBEE;background:#F2F3FC}.pd-kpis span{font-size:10px;line-height:1.3;color:var(--ui-muted)}.pd-kpis b{grid-column:2;grid-row:1/3;font-size:clamp(20px,2vw,25px);font-weight:600;letter-spacing:-.04em;line-height:1.1;color:var(--ui-blue);white-space:nowrap}.pd-kpis small{font-size:9px;line-height:1.3;color:var(--ui-muted)}
+.pd-content{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,26%);gap:18px;min-height:340px;align-items:stretch}.pd-primary{display:flex;flex-direction:column;min-width:0}.pd-panel{flex:1;border:1px solid #DCD1D1;border-radius:5px;padding:15px;background:#FFFFFF;min-width:0}.pd-panel-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;min-height:20px}.pd-panel-heading>b{font-size:13px;font-weight:600;letter-spacing:-.015em}.pd-status{font-size:10px;line-height:1.3;white-space:nowrap;border-radius:4px;padding:4px 7px;background:#F6F1F9;color:#654B75;border:1px solid #EAE0F0}.pd-status.steady{background:#F6F1F9;color:#654B75}
+.pd-select{appearance:none;width:100%;font-family:var(--font);color:inherit;text-align:left;cursor:pointer;background:transparent;border:0;border-bottom:1px solid #EAE0F0;border-radius:4px;min-height:40px;transition:background .15s,border-color .15s}
+.pd-select:hover{background:#F6F1F9}.pd-select[aria-pressed="true"]{background:#F2F3FC;box-shadow:inset 2px 0 #5662A6}.pd-select:focus-visible,.pd-filter-controls button:focus-visible,.pd-mini-control:focus-visible{outline:2px solid #5662A6;outline-offset:2px;position:relative;z-index:2}
+.pd-invoice-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px 10px;font-size:13px;line-height:1.4;min-height:52px}.pd-invoice-row>span{color:#574C54}.pd-invoice-row b{font-weight:500;white-space:nowrap}.pd-credit>span,.pd-credit b{color:#5662A6}.pd-invoice-row.pd-credit[data-excluded="true"] b{text-decoration:line-through;color:#816394}
+.pd-invoice-total{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:16px}.pd-invoice-total>b{font-size:26px;font-weight:600;letter-spacing:-.03em}.pd-invoice-total small{font-size:10px;font-weight:500;color:#654B75;letter-spacing:.03em;margin-left:4px}
+.pd-mini-control,.pd-filter-controls button{appearance:none;border:1px solid #D9C8E4;border-radius:4px;background:#FFFFFF;color:#654B75;cursor:pointer;font:500 11px var(--font);padding:5px 10px;min-height:29px;transition:background .15s,color .15s}.pd-mini-control[aria-pressed="true"],.pd-filter-controls button[aria-pressed="true"]{background:#E0E3F8;color:#374078;border-color:#A1ACE2}.pd-mini-control:hover,.pd-filter-controls button:hover{border-color:#5662A6}
+.pd-filter-controls{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 8px}.pd-filter-controls>span{font-size:10px;color:#654B75;margin-left:auto}
+.pd-note{display:flex;align-items:center;gap:9px;margin-top:9px;font-size:11px;color:#654B75;line-height:1.5;min-height:29px}.pd-note>span:last-child:not(:nth-child(2)){margin-left:auto;color:#654B75}.pd-note b{font-weight:500;color:#493454}.pd-check{width:20px;height:20px;display:grid;place-items:center;flex:none;background:#F2F3FC;border-radius:4px;color:#5662A6;font-size:11px}.pd-note.attention .pd-check{color:#A61E4D;background:#F8ECF4}.pd-note.attention b{color:#A61E4D}
+.pd-event{display:grid;grid-template-columns:42px 7px minmax(0,1fr);gap:13px;padding:14px 10px;position:relative;min-height:62px}.pd-event:not(:last-child)::after{content:"";position:absolute;left:68px;top:26px;bottom:-25px;width:1px;background:#D9C8E4;pointer-events:none}.pd-event time{font-size:11px;color:#654B75;line-height:1.4}.pd-event>i{width:6px;height:6px;border-radius:50%;background:#5662A6;margin-top:5px;z-index:1;box-shadow:0 0 0 3px #FFFFFF}.pd-event>i.critical{background:#A61E4D}.pd-event>i.steady{background:#B89CC8}.pd-event b{font-size:13px;font-weight:500;line-height:1.4;display:block}.pd-event small{display:block;font-size:11px;line-height:1.4;color:#654B75;margin-top:4px}
+.pd-object-row{display:grid;grid-template-columns:96px minmax(0,1fr) 6px;gap:14px;align-items:center;padding:14px 10px;min-height:53px;font-size:13px}.pd-object-row:last-child{border:0}.pd-object-row>span{font-size:11px;color:#654B75}.pd-object-row b{font-size:13px;font-weight:500}.pd-object-row i{width:5px;height:5px;border-radius:50%;background:#B89CC8}.pd-object-row i.neev{background:#818CCE}.pd-object-row i.ayana{background:#83296A}.pd-object-row i.vitana{background:#5662A6}
+.pd-usage{display:grid;grid-template-columns:1fr auto;gap:7px;margin-top:10px;font-size:11px;color:#654B75}.pd-usage>b{font-weight:500;color:#493454}.pd-usage>div{height:5px;border-radius:3px;background:#EAE0F0;grid-column:1/-1;overflow:hidden}.pd-usage i{display:block;width:96%;height:100%;background:#5662A6;border-radius:3px;transition:width .25s}
+.pd-selection{display:flex;flex-direction:column;border:1px solid #D9C8E4;border-radius:5px;background:#F6F1F9;padding:20px;min-width:0}.pd-selection-eyebrow{display:block;font:500 10px var(--font);text-transform:uppercase;letter-spacing:.08em;color:#654B75;margin-bottom:16px}.pd-selection h3{font:600 18px/1.3 var(--font);letter-spacing:-.02em;color:#250B1E;margin:0 0 14px;text-wrap:wrap}.pd-selection p{font:400 13px/1.65 var(--font);color:#574C54;margin:0 0 20px;max-width:none}.pd-selection-meta{display:block;margin-top:auto;padding-top:14px;border-top:1px solid #D9C8E4;font:500 11px/1.5 var(--font);color:#465089;overflow-wrap:anywhere}
+.pd-statusbar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 20px;border-top:1px solid #EAE0F0;background:#F6F1F9;color:#654B75;font-size:10px}.pd-statusbar>span:first-child{display:flex;align-items:center;gap:7px}.pd-statusbar i{width:5px;height:5px;border-radius:50%;background:#816394}.product-dashboard figcaption{display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px 14px;margin-top:10px;color:#654B75;font-size:10px;letter-spacing:.02em}
+.product-dashboard[data-product="vitana"] .pd-kpis>div:first-child b{color:#A61E4D}
+/* Light equipment floors share the same readable palette as the application. */
+.pd-board-viewport{position:relative;height:220px;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#B89CC8 #F6F1F9;border:1px solid #D9C8E4;border-radius:4px;background:#F6F1F9;margin:8px 0 6px;isolation:isolate}
+.pd-equipment-board{display:grid;background-color:#F6F1F9;background-image:linear-gradient(30deg,transparent 49.5%,#C8B1D633 50%,transparent 50.5%),linear-gradient(150deg,transparent 49.5%,#C8B1D633 50%,transparent 50.5%);background-size:68px 40px;padding:12px;min-height:100%;gap:8px;align-content:start;position:relative}
+.pd-floor-map{grid-template-columns:repeat(auto-fill,minmax(47px,1fr));margin:0}.pd-rack.pd-select{position:relative;display:flex;flex-direction:column;align-items:center;min-height:94px;padding:4px 2px 6px;gap:0;border:1px solid transparent;border-radius:4px;background:transparent;box-shadow:none}.pd-rack.pd-select.w{border-color:#A1ACE266}.pd-rack.pd-select.b{border-color:#A61E4D66}.pd-equipment-board .pd-select[aria-pressed="true"]{border-color:#5662A6;background:#E0E3F880;box-shadow:inset 0 0 0 1px #5662A633}.pd-equipment-board .pd-select:hover{background:#EAE0F0;border-color:#B89CC8}.pd-equipment-board .pd-select:focus-visible{outline:2px solid #5662A6;outline-offset:1px}.pd-equipment-board .pd-select[hidden]{display:none}
+.pd-equipment-object{display:block;width:100%;height:72px;pointer-events:none}.pd-equipment-object :global(svg){display:block;width:100%;height:100%;overflow:visible;pointer-events:none}.pd-rack-label{font:500 9px/1.3 var(--mono);letter-spacing:.02em;color:#493454;text-align:center}.pd-rack b{position:absolute;inset:4px 3px auto auto;display:grid;place-items:center;width:14px;height:14px;border-radius:3px;background:#A61E4D;color:#FFFFFF;font:700 10px/1 var(--font)}
+.pd-board-hint{font:400 10px/1.4 var(--font);color:#654B75;margin:0 0 8px;max-width:none}.pd-legend{display:flex;flex-wrap:wrap;gap:12px;font-size:10px;color:#654B75}.pd-legend span{display:flex;align-items:center;gap:5px}.pd-legend i{width:6px;height:6px;background:#B89CC8;border-radius:1px}.pd-legend i.reserved{background:#818CCE}.pd-legend i.alarm{background:#A61E4D}.pd-legend i.free{background:#EAE0F0;border:1px solid #C8B1D6}
+.pd-nodes{grid-template-columns:repeat(auto-fit,minmax(72px,1fr));margin:0;gap:8px}.pd-nodes>button.pd-select{min-height:108px;padding:6px 4px;border:1px solid #C5CBEE;border-radius:4px;background:#FFFFFF66;text-align:center}.pd-nodes>button>span{display:block;color:#374078;font-size:10px;line-height:1.3}.pd-nodes>button>.pd-equipment-object{height:75px;margin:2px 0}.pd-nodes small{font-size:9px;color:#654B75;line-height:1.3;display:block}.pd-gpu-viewport{height:238px;margin-bottom:12px}
+@media(min-width:1050px){.pd-nodes{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(max-width:1000px){.pd-main{padding:17px}.pd-main-header{gap:17px;grid-template-columns:minmax(0,.85fr) minmax(0,1.3fr)}.pd-date{display:none}.pd-kpis>div{padding:10px 8px;gap:4px}.pd-kpis b{font-size:20px}.pd-kpis small{font-size:8px}.pd-content{gap:14px;grid-template-columns:minmax(0,1fr) 225px}.pd-selection{padding:16px}.pd-selection h3{font-size:17px}.pd-panel{padding:13px}.pd-panel-heading>b{font-size:12px}.pd-invoice-row{font-size:12px}.pd-object-row{grid-template-columns:76px minmax(0,1fr) 5px;gap:10px}}
+@media(max-width:760px){.pd-main-header{grid-template-columns:1fr;gap:15px}.pd-page-heading h2{font-size:20px}.pd-content{grid-template-columns:1fr;min-height:0}.pd-selection{padding:17px;min-height:0}.pd-selection-eyebrow{margin-bottom:10px}.pd-selection p{margin-bottom:14px}.pd-selection-meta{margin-top:0}.pd-kpis>div{padding:10px 12px}.pd-kpis small{font-size:9px}.pd-statusbar{font-size:9px;padding:10px 14px}.pd-board-viewport{height:240px}.pd-gpu-viewport{height:255px}.pd-primary .pd-panel{min-height:0}}
+@media(max-width:560px){.pd-workspace{grid-template-columns:minmax(0,1fr)}.pd-rail{display:none}.pd-main{padding:14px}.pd-topbar{padding:11px 14px;gap:12px}.pd-top-location{font-size:9px;text-align:right}.pd-brand{font-size:14px}.pd-kpis{gap:6px}.pd-kpis>div{display:block;padding:9px 8px}.pd-kpis span,.pd-kpis small{display:block;font-size:9px}.pd-kpis b{display:block;font-size:23px;margin:5px 0}.pd-panel{padding:11px}.pd-invoice-row{padding:13px 6px;font-size:11px}.pd-invoice-total{gap:10px}.pd-invoice-total>b{font-size:23px}.pd-mini-control{font-size:10px;padding-inline:8px}.pd-note{font-size:10px}.pd-statusbar>span:last-child{display:none}.pd-event{padding:12px 6px;grid-template-columns:35px 6px minmax(0,1fr);gap:10px}.pd-event:not(:last-child)::after{left:53px}.pd-event b{font-size:12px}.pd-object-row{padding:12px 6px;grid-template-columns:67px minmax(0,1fr) 5px;gap:9px}.pd-object-row b{font-size:12px}.pd-equipment-board{padding:9px;gap:6px}.pd-nodes{grid-template-columns:repeat(auto-fit,minmax(65px,1fr))}.pd-selection h3{font-size:17px}}
+@media(max-width:360px){.pd-kpis b{font-size:20px}.pd-page-heading h2{font-size:18px}.pd-topbar{gap:8px}.pd-avatar{display:none}.pd-filter-controls button{padding-inline:8px}.pd-filter-controls>span{font-size:9px}.pd-invoice-total>b{font-size:21px}}
+@media(prefers-reduced-motion:reduce){.pd-select,.pd-mini-control,.pd-filter-controls button,.pd-usage i{transition:none}}
+</style>
+<script is:inline src="/js/product-dashboard.js"></script>

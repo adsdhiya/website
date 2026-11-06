@@ -1,0 +1,29 @@
+---
+import ContactForm from "./ContactForm.astro";
+interface Props { heading: string; sub: string; button?: string; eyebrow?: string; variant?: "default" | "home" }
+const { heading, sub, button = "Talk to us →", eyebrow = "Design partner places are open", variant = "default" } = Astro.props;
+---
+<section class:list={["cta", "cta-partner", { "cta-home": variant === "home" }]} id="talk"><div class="wrap ctaf">
+  <div class="ctxt"><img class="cta-mark" src="/media/dhiya-mark-ink.svg" alt="" width="72" height="72"><p class="eb">{eyebrow}</p><h2 class="st" set:html={heading} /><p>{sub}</p></div>
+  <ContactForm button={button} variant="partner" />
+</div></section>
+<style>
+  .cta>.wrap.ctaf{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:center}
+  .cta>.wrap.ctaf>.ctxt{min-width:0}
+  .cta .ctxt .eb{color:#9B5DE5}
+  .cta-mark{width:72px;height:72px}
+  .cta.cta-partner{background:#fff;color:#250B1E;padding-block:clamp(56px,7vw,88px);text-align:left}
+  .cta.cta-partner>.wrap.ctaf{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:center;gap:clamp(32px,5vw,72px)}
+  .cta.cta-partner .ctxt{min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:18px}
+  .cta.cta-partner .cta-mark{width:48px;height:48px}
+  .cta.cta-partner .ctxt .eb{font:500 10px/1.5 var(--mono);letter-spacing:.13em;text-transform:uppercase;color:#76556F;margin:0}
+  .cta.cta-partner .ctxt h2{font:500 clamp(34px,3.5vw,52px)/1.08 var(--font);letter-spacing:-.035em;max-width:15ch;margin:0;color:#250B1E}
+  .cta.cta-partner .ctxt h2 :global(span){color:#9875AA}
+  .cta.cta-partner .ctxt>p:not(.eb){font-size:16px;line-height:1.65;color:#6C5766;max-width:43ch;margin:0}
+  @media(max-width:860px){.cta>.wrap.ctaf{grid-template-columns:minmax(0,1fr)}}
+  @media(max-width:800px){
+    .cta.cta-partner>.wrap.ctaf{grid-template-columns:minmax(0,1fr);gap:30px}
+    .cta.cta-partner .ctxt h2{max-width:20ch;font-size:clamp(34px,6vw,46px)}
+    .cta.cta-partner .ctxt>p:not(.eb){max-width:52ch}
+  }
+</style>

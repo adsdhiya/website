@@ -1,0 +1,59 @@
+---
+/** Shared layout for /privacy, /terms and /security. Copy lives in src/data/legal.ts. */
+import Base from "../layouts/Base.astro";
+import Cta from "./Cta.astro";
+import { site } from "../data/site";
+import type { LegalDoc } from "../data/legal";
+interface Props { doc: LegalDoc }
+const { doc } = Astro.props;
+---
+<Base title={doc.title} description={doc.description} path={doc.path} kind="WebPage">
+<header class="phero wrap legal-hero">
+  <div class="copy">
+    <p class="eb" style="color:var(--pd)">{doc.eyebrow}</p>
+    <h1>{doc.heading}</h1>
+    <p class="lede">{doc.lede}</p>
+    <p class="legal-updated">Last updated {site.legal.updated}</p>
+  </div>
+</header>
+<section class="legal-body"><div class="wrap legal-grid">
+  <nav class="legal-toc" aria-label="On this page">
+    <p class="eb">On this page</p>
+    {doc.sections.map((s) => <a href={`#${s.id}`}>{s.h}</a>)}
+  </nav>
+  <div class="legal-doc">
+    {doc.sections.map((s) => (
+      <section id={s.id}>
+        <h2>{s.h}</h2>
+        {s.body.map((block) => Array.isArray(block)
+          ? <ul>{block.map((item) => <li set:html={item} />)}</ul>
+          : <p set:html={block} />)}
+      </section>
+    ))}
+  </div>
+</div></section>
+<Cta heading="Questions? <span>Talk to us.</span>" sub="Tell us what you need to know, or bring one hall and we'll show you the record on your own floor." />
+</Base>
+<style>
+  .legal-hero{grid-template-columns:minmax(0,1fr);padding-block:clamp(40px,7vh,88px) clamp(32px,5vh,56px)}
+  .legal-hero h1{max-width:none;font-size:clamp(40px,5vw,72px)}
+  .legal-hero .lede{max-width:60ch}
+  .legal-updated{font:500 11px/1.5 var(--mono);letter-spacing:.06em;color:var(--sub)}
+  .legal-body{padding-block:0 clamp(64px,8vw,112px)}
+  .legal-grid{display:grid;grid-template-columns:minmax(180px,240px) minmax(0,1fr);gap:clamp(32px,6vw,88px);align-items:start}
+  .legal-toc{position:sticky;top:96px;display:grid;gap:9px;font-size:14px;line-height:1.35}
+  .legal-toc .eb{font-size:11px;color:var(--sub);margin-bottom:5px}
+  .legal-toc a{text-decoration:none;color:var(--ink)}
+  .legal-toc a:hover{color:var(--pd);text-decoration:underline}
+  .legal-doc{display:grid;gap:clamp(36px,4vw,52px);max-width:72ch;min-width:0}
+  .legal-doc section{display:grid;gap:14px;scroll-margin-top:96px}
+  .legal-doc h2{font-size:clamp(22px,2vw,28px);letter-spacing:-.02em;line-height:1.2}
+  .legal-doc p{max-width:none}
+  .legal-doc ul{display:grid;gap:9px;margin:0;padding-left:20px}
+  .legal-doc :global(a){color:var(--pd);text-underline-offset:2px}
+  .legal-doc :global(strong){font-weight:600}
+  @media(max-width:800px){
+    .legal-grid{grid-template-columns:minmax(0,1fr)}
+    .legal-toc{position:static;padding-bottom:24px;border-bottom:1px solid var(--soft)}
+  }
+</style>

@@ -1,0 +1,63 @@
+---
+import Base from "../layouts/Base.astro";
+import Mock from "./Mock.astro";
+import ProductDashboard from "./ProductDashboard.astro";
+import "../styles/products.css";
+import Logo from "./Logo.astro";
+import Cta from "./Cta.astro";
+const { p } = Astro.props as { p: any };
+const slug = p.slug as string;
+const mark = slug === "dil" ? "/media/dhiya-mark-ink.svg" : `/media/${slug}-mark.svg`;
+// Front edge of each original slab in iso.js's unchanged 800 × 1000 viewBox.
+const floorY = ({ dil: 791, ayana: 760, neev: 786, vitana: 805, aire: 830 } as Record<string, number>)[slug] || 830;
+---
+<Base title={p.title} description={p.lede} path={slug === "dil" ? "/dil" : `/${slug}`} kind="SoftwareApplication" product={p.eyebrow.split(" · ").pop()} dataP={slug === "dil" ? undefined : slug}>
+  <main class="product-page">
+  <header class="phero wrap">
+    <div class="copy">
+      <h1 set:html={p.h1} />
+      <p class="lede">{p.lede}</p>
+      <div class="ctas"><a class="btn" href="#talk">Talk to us →</a></div>
+    </div>
+    <figure class="pimg product-hero-art" style={`--iso-floor-y:${floorY};--iso-svg-height:${100000 / floorY}%`}>
+      <div class="product-iso-frame"><svg class="iso" data-scene={slug} aria-hidden="true"></svg></div>
+      <figcaption class="product-hero-caption"><img src={mark} alt="" width="26" height="26" /><span>{p.cap}</span></figcaption>
+    </figure>
+  </header>
+
+  <section class="sec" id="how"><div class="wrap">
+    <div class="product-overview">
+      <div class="sh product-overview-copy"><h2 class="st" set:html={p.how_h} /><p>{p.how_p}</p></div>
+      <ProductDashboard slug={slug} />
+    </div>
+    <div class="steps">
+      {p.steps.map((s: any, i: number) => (
+        <div class="step"><div class="txt"><p class="n">{String(i + 1).padStart(2, "0")}</p><h3>{s.h}</h3><p>{s.p}</p>{s.tags && <ul>{s.tags.map((t: string) => <li>{t}</li>)}</ul>}</div><Mock spec={s.mock} product={slug} /></div>
+      ))}
+    </div>
+  </div></section>
+
+  <section class="sec alt"><div class="wrap">
+    <div class="sh"><h2 class="st" set:html={p.hood_h} /><p>{p.hood_p}</p></div>
+    <div class="hood">
+      {p.hood.map((h: any, i: number) => (
+        <div class="hb"><p class="n">{String(i + 1).padStart(2, "0")}</p><h3>{h.h}</h3><p>{h.p}</p><ul>{h.sub.map(([a, b]: string[]) => <li><b>{a}</b><span>{b}</span></li>)}</ul></div>
+      ))}
+    </div>
+    <div class="midcta"><p>{p.mid}</p><a class="btn" href="#talk">Speak to our experts →</a></div>
+  </div></section>
+
+  <section class="sec"><div class="wrap">
+    <div class="sh"><h2 class="st">Works with the stack <em>you already run.</em></h2><p>{p.integ_p}</p></div>
+    <div class="ig">
+      {p.integ.map((g: any) => (
+        <div class="igc"><h3>{g.h}</h3><p>{g.p}</p><div class="lgs">{g.items.map((it: any[]) => <Logo name={it[0]} slug={it[1]} soon={!!it[2]} />)}</div></div>
+      ))}
+    </div>
+    {p.protos && <div class="protos">{p.protos.map((x: string) => <span>{x}</span>)}</div>}
+  </div></section>
+
+  <Cta heading={p.cta_h} sub={p.cta_p} button="Get in touch →" />
+  <script is:inline src="/iso.js"></script>
+  </main>
+</Base>

@@ -1,0 +1,55 @@
+---
+interface Props { announcement?: string }
+const { announcement = "Design partner places are open" } = Astro.props;
+const caption = "New beginnings, together.";
+---
+<div class="ann diwali-ribbon" data-diwali-ribbon data-lit="false">
+  <div class="diwali-inner">
+    <div class="diwali-lamps" aria-hidden="true">
+      {[0, 1, 2].map((lamp) => (
+        <svg class="diwali-diya" style={`--diya-delay:${lamp * 90}ms`} viewBox="0 0 24 28" focusable="false">
+          <path class="diya-bowl" d="M3 18Q12 21 21 18C19 26 5 26 3 18Z" />
+          <path class="diya-wick" d="M12 18V15" />
+          <path class="diya-flame" d="M12 3C11 7 7.6 9.1 8.1 12.1C8.7 16.2 15.5 16.2 16 11.8C16.3 8.6 13.2 7.5 12 3Z" />
+        </svg>
+      ))}
+      <svg class="diwali-rangoli" viewBox="0 0 24 24" focusable="false"><path d="m12 2 3 7 7 3-7 3-3 7-3-7-7-3 7-3Z" /><path d="m12 7 5 5-5 5-5-5Z" /></svg>
+    </div>
+    <a class="diwali-announcement" href="#talk"><span>{announcement}</span><span class="diwali-arrow" aria-hidden="true">↗</span></a>
+    <div class="diwali-moment">
+      <button class="diwali-flame-button" type="button" aria-label="Light the Diwali lamps" aria-pressed="false" title="Light the Diwali lamps">
+        <svg viewBox="0 0 24 28" aria-hidden="true" focusable="false">
+          <path class="diya-bowl" d="M3 18Q12 21 21 18C19 26 5 26 3 18Z" />
+          <path class="diya-wick" d="M12 18V15" />
+          <path class="diya-flame" d="M12 3C11 7 7.6 9.1 8.1 12.1C8.7 16.2 15.5 16.2 16 11.8C16.3 8.6 13.2 7.5 12 3Z" />
+        </svg>
+      </button>
+      <span class="diwali-caption" data-diwali-caption data-default-caption={caption} role="status" aria-live="polite" aria-atomic="true">{caption}</span>
+    </div>
+  </div>
+</div>
+<style>
+  .ann.diwali-ribbon{position:relative;z-index:3;display:block;margin:0;padding:0;background:#250B1E;color:#F7F0ED;border-bottom:1px solid #83296A66;text-align:left;font-family:var(--font);isolation:isolate}
+  .diwali-inner{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:18px;max-width:1200px;min-height:44px;margin-inline:auto;padding-block:3px;padding-inline:max(20px,env(safe-area-inset-left,0px),4vw) max(20px,env(safe-area-inset-right,0px),4vw)}
+  .diwali-lamps{display:flex;align-items:center;gap:8px;justify-self:start;color:#B89CC8;pointer-events:none}
+  .diwali-diya{width:16px;height:22px;overflow:visible}
+  .diya-bowl,.diya-wick{fill:none;stroke:currentColor;stroke-width:1.1;stroke-linecap:round;stroke-linejoin:round}
+  .diya-flame{fill:#E9B44C;fill-opacity:0;stroke:#E9B44C;stroke-opacity:.38;stroke-width:1;transition:fill-opacity .5s ease,stroke-opacity .5s ease;transition-delay:var(--diya-delay,0ms)}
+  .diwali-rangoli{width:15px;height:15px;margin-left:6px;fill:none;stroke:#B89CC8;stroke-width:.8;opacity:.5}
+  .diwali-announcement{display:inline-flex;justify-self:center;align-items:center;justify-content:center;gap:10px;min-height:34px;color:#F7F0ED;text-decoration:none;font-size:12px;font-weight:500;line-height:1.4;text-align:center}
+  .diwali-announcement>span:first-child{white-space:nowrap}.diwali-arrow{color:#B89CC8;font-size:16px;line-height:1;flex:none;transition:color .2s}
+  .diwali-announcement:hover{color:#FFFFFF}.diwali-announcement:hover .diwali-arrow{color:#E9B44C}
+  .diwali-announcement:focus-visible,.diwali-flame-button:focus-visible{outline:2px solid #E9B44C;outline-offset:2px;border-radius:3px}
+  .diwali-moment{display:flex;align-items:center;justify-self:end;gap:6px;min-width:0}
+  .diwali-flame-button{appearance:none;display:grid;place-items:center;flex:none;width:34px;height:34px;padding:5px;border:1px solid transparent;border-radius:4px;background:transparent;color:#B89CC8;cursor:pointer;transition:border-color .2s,color .2s}
+  .diwali-flame-button svg{display:block;width:20px;height:24px;overflow:visible}
+  .diwali-flame-button .diya-flame{fill-opacity:.38;stroke-opacity:.8}
+  .diwali-flame-button:hover{color:#E9B44C;border-color:#B89CC866}
+  .diwali-caption{display:flex;align-items:center;width:128px;min-height:30px;font-size:10px;font-weight:400;line-height:1.35;color:#C8B1D6;transition:color .3s}
+  .diwali-ribbon[data-lit="true"] .diya-flame{fill-opacity:1;stroke-opacity:1}
+  .diwali-ribbon[data-lit="true"] .diwali-caption{color:#F5D896}
+  @media(max-width:800px){.diwali-inner{gap:12px}.diwali-lamps{gap:5px}.diwali-rangoli{display:none}.diwali-caption{width:99px;font-size:9px}.diwali-announcement{font-size:11px;gap:7px}}
+  @media(max-width:600px){.diwali-inner{grid-template-columns:minmax(0,1fr) auto;gap:10px;padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px))}.diwali-lamps{display:none}.diwali-announcement{justify-self:start;text-align:left;justify-content:flex-start;min-width:0}.diwali-announcement>span:first-child{white-space:normal}.diwali-caption{width:86px;min-height:32px}.diwali-flame-button{width:30px;height:34px}.diwali-moment{gap:4px}}
+  @media(prefers-reduced-motion:reduce){.diya-flame,.diwali-arrow,.diwali-flame-button,.diwali-caption{transition:none}}
+</style>
+<script is:inline src="/js/diwali-ribbon.js"></script>

@@ -1,0 +1,22 @@
+# Dhiya Labs
+
+> Dhiya Labs builds DIL, the system of record for the data centre, and four products that read and write it: Ayana (sell · CRM + billing & revenue), Neev (operate · DC Ops), Vitana (resolve · IT Ops) and Aire (compute · cloud and GPU tenants). Operator-founded, in stealth, with design partners.
+
+## Platform
+- [DIL](https://dhiya.ai/dil): one record of every site, hall, rack, power path, customer, contract, ticket, change and credit; connectors for BMS, EPMS, DCIM, ITSM, finance and identity; chain of record from reading to credit.
+- [Architecture](https://dhiya.ai/#architecture): four products on one record, shared incidents/changes, approvals and audit, connectors, deployment options.
+
+## Products
+- [Ayana](https://dhiya.ai/ayana): CRM, contracts, metered billing and revenue, quoted against live capacity.
+- [Neev](https://dhiya.ai/neev): racks, power, cooling, capacity, work orders and alarms.
+- [Vitana](https://dhiya.ai/vitana): monitoring, incidents, changes, runbooks and SLA reporting.
+- [Aire](https://dhiya.ai/aire): provisioning, metering and billing for cloud and GPU tenants.
+
+## Company
+- [About](https://dhiya.ai/about): twenty years of data centre operations experience; building in stealth; investor contact.
+- Contact: hi@dhiya.ai · Investors: founders@dhiya.ai
+
+## Legal
+- [Privacy](https://dhiya.ai/privacy): what the website collects, who processes it and your rights.
+- [Terms](https://dhiya.ai/terms): terms of use for the website.
+- [Security](https://dhiya.ai/security): security approach and how to report a vulnerability.

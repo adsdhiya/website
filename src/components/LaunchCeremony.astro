@@ -1,0 +1,125 @@
+---
+const previewAllowed = import.meta.env.DEV;
+
+// A fixed arrangement keeps the light field consistent across renders.
+const palette = ['#250B1E', '#342136', '#49324F', '#62476F', '#80628E', '#B89CC8', '#555E9C', '#3C426E', '#2F1C35'];
+let seed = 406;
+const next = () => {
+  seed = (seed * 16807) % 2147483647;
+  return seed / 2147483647;
+};
+const bands = Array.from({ length: 184 }, (_, index) => ({
+  width: .3 + next() * 1.8,
+  color: palette[Math.floor(next() * palette.length)],
+  delay: (2520 + next() * 320).toFixed(0),
+  origin: index % 3 === 0 ? 'bottom' : 'top',
+}));
+---
+<dialog class="launch-ceremony" data-launch-ceremony data-preview-allowed={previewAllowed ? 'true' : 'false'} aria-labelledby="launch-title" aria-describedby="launch-description">
+  <div class="launch-field" aria-hidden="true">
+    {bands.map((band) => <span class="launch-band" style={`--band-width:${band.width};--band-color:${band.color};--band-delay:${band.delay}ms;--band-origin:${band.origin}`}></span>)}
+    <div class="launch-field-light"></div>
+  </div>
+
+  <div class="launch-card">
+    <div class="launch-card-heading">
+      <span class="launch-wordmark" aria-label="Dhiya">Dhıya<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 0 2.4 9.6L24 12l-9.6 2.4L12 24l-2.4-9.6L0 12l9.6-2.4Z" /></svg></span>
+      <span class="launch-edition">A Diwali beginning</span>
+    </div>
+
+    <button class="launch-cut" type="button" data-launch-cut autofocus aria-label="Cut the ribbon and open Dhiya">
+      <span class="launch-thread" aria-hidden="true"></span>
+      <span class="launch-ribbon" aria-hidden="true">
+        <svg class="launch-ribbon-half launch-ribbon-left" viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M0 3C24 7 55 6 100 6V24C55 24 24 23 0 27Z" /></svg>
+        <svg class="launch-ribbon-half launch-ribbon-right" viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M0 6C45 6 76 7 100 3V27C76 23 45 24 0 24Z" /></svg>
+        <span class="launch-cut-mark"></span>
+      </span>
+      <span class="launch-cut-label">Open Dhiya <span aria-hidden="true">↗</span></span>
+    </button>
+
+    <div class="launch-card-caption">
+      <h1 id="launch-title">A little light. A new beginning.</h1>
+      <p id="launch-description">Click the ribbon or press Enter.</p>
+    </div>
+  </div>
+
+  <div class="launch-welcome" aria-hidden="true">
+    <svg class="launch-welcome-star" viewBox="0 0 24 24"><path d="m12 0 2.4 9.6L24 12l-9.6 2.4L12 24l-2.4-9.6L0 12l9.6-2.4Z" /></svg>
+    <p class="launch-welcome-title">Welcome to Dhiya</p>
+    <p class="launch-welcome-note">A bright beginning. Happy Diwali.</p>
+  </div>
+
+  <div class="launch-bottom">
+    <span class="launch-diwali"><svg viewBox="0 0 28 28" fill="none" aria-hidden="true"><path d="M14 3c-5 5-4 8 0 9 4-1 5-4 0-9Z"/><path d="M4 16h20c-2 6-5 9-10 9S6 22 4 16Z"/></svg>Happy Diwali</span>
+    <span class="launch-enter" aria-hidden="true">Enter <span>↵</span></span>
+    <button type="button" class="launch-skip" data-launch-skip>Skip intro <span aria-hidden="true">↗</span></button>
+  </div>
+  <span class="launch-sr" role="status" aria-live="polite" data-launch-status></span>
+</dialog>
+<script is:inline src="/js/launch-ceremony.js"></script>
+
+<style>
+  .launch-ceremony{position:fixed;inset:0;display:grid;place-items:center;width:100%;height:100%;height:100dvh;max-width:none;max-height:none;margin:0;padding:24px;border:0;border-radius:0;background:transparent;color:#f3f0e4;overflow:hidden;font-family:var(--font);isolation:isolate;overscroll-behavior:contain}
+  .launch-ceremony:not([open]){display:none}
+  .launch-ceremony::backdrop{background:transparent}
+  .launch-field{position:absolute;inset:0;z-index:-1;display:flex;overflow:hidden;pointer-events:none;background:#250B1E}
+  .launch-band{height:100%;flex:var(--band-width) 1 0;min-width:0;background:var(--band-color);transform-origin:center var(--band-origin);box-shadow:inset -1px 0 #250B1E30}
+  .launch-field::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#250B1E38,transparent 32%,#250B1E38);pointer-events:none}
+  .launch-field-light{position:absolute;inset:0 auto 0 -60%;width:55%;background:linear-gradient(90deg,transparent,#E9C87916,transparent);animation:launch-light-pass 18s linear infinite;pointer-events:none}
+  .launch-card{position:relative;width:clamp(340px,30vw,510px);aspect-ratio:1.4;background:#250B1E;border:1px solid #B89CC84D;border-radius:6px;box-shadow:0 18px 65px #180B2140;display:flex;flex-direction:column;justify-content:space-between;text-align:center}
+  .launch-card-heading{padding:clamp(26px,3.4vw,48px) 24px 0;display:flex;flex-direction:column;align-items:center;gap:12px}
+  .launch-wordmark{position:relative;display:inline-block;font:500 28px/1 var(--font);letter-spacing:-1.4px;color:#F7F0ED}
+  .launch-wordmark svg{position:absolute;width:8px;height:8px;left:35px;top:-3px;fill:#e9c879}
+  .launch-edition{font:400 9px/1.4 var(--mono);letter-spacing:.13em;text-transform:uppercase;color:#B89CC8}
+  .launch-cut{position:absolute;inset:50% 0 auto;width:100%;height:92px;transform:translateY(-50%);border:0;border-radius:0;background:none;color:#f3f0e4;cursor:pointer;display:grid;place-items:center;padding:0;isolation:isolate}
+  .launch-thread{position:absolute;top:50%;left:0;right:0;height:1px;background:#B89CC82E;transition:background .4s}
+  .launch-ribbon{position:relative;display:flex;width:38%;height:24px;filter:drop-shadow(0 0 20px #d4d9a717);transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+  .launch-ribbon-half{width:50%;height:100%;fill:#E9C879;overflow:visible}
+  .launch-cut-mark{position:absolute;left:50%;top:7px;bottom:7px;width:1px;background:#250B1E;opacity:0;transform:scaleY(.3);transition:opacity .35s,transform .35s}
+  .launch-cut-label{position:absolute;top:calc(50% + 26px);left:0;right:0;font:400 10px/1.5 var(--mono);letter-spacing:.08em;color:#C8B1D6;opacity:0;transform:translateY(4px);transition:opacity .3s,transform .3s}
+  .launch-cut-label>span{margin-left:8px}
+  .launch-cut:hover .launch-ribbon,.launch-cut:focus-visible .launch-ribbon{transform:scaleX(1.045)}
+  .launch-cut:hover .launch-cut-mark,.launch-cut:focus-visible .launch-cut-mark{opacity:.55;transform:scaleY(1)}
+  .launch-cut:hover .launch-cut-label,.launch-cut:focus-visible .launch-cut-label{opacity:1;transform:translateY(0)}
+  .launch-cut:focus-visible{outline:none}
+  .launch-cut:focus-visible .launch-ribbon{outline:1px solid #e9c879;outline-offset:10px;border-radius:2px}
+  .launch-card-caption{padding:0 16px clamp(25px,2.6vw,38px)}
+  .launch-card-caption h1{font:400 clamp(14px,1.15vw,17px)/1.4 var(--font);letter-spacing:-.01em;margin:0;color:#F0E7F2}
+  .launch-card-caption p{font:400 11px/1.5 var(--font);letter-spacing:.01em;margin:8px 0 0;max-width:none;color:#B89CC8}
+  .launch-welcome{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:24px;text-align:center;pointer-events:none;opacity:0;background:radial-gradient(ellipse at center,#250B1EF2 0%,#250B1ED9 27%,#250B1E8C 58%,#250B1E26 100%)}
+  .launch-welcome-star{width:32px;height:32px;fill:#E9C879;filter:drop-shadow(0 0 14px #E9C87966)}
+  .launch-welcome-title{margin:0;max-width:none;font:500 clamp(32px,5.8vw,84px)/1.12 var(--font);letter-spacing:-.045em;color:#E9C879;background:linear-gradient(110deg,#C99D4D 4%,#F6E5B6 39%,#E9C879 64%,#D5AE60 100%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 0 48px #E9C87914}
+  .launch-welcome-note{margin:0;max-width:none;font:400 clamp(12px,1.1vw,16px)/1.5 var(--font);letter-spacing:.06em;color:#E8D7B2}
+  .launch-bottom{position:absolute;left:clamp(24px,4vw,64px);right:clamp(24px,4vw,64px);bottom:max(26px,env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .launch-diwali{display:flex;align-items:center;gap:8px;font:400 11px/1.5 var(--font);color:#F0E7F2}
+  .launch-diwali svg{width:23px;height:23px;stroke:#e9c879;stroke-width:1.05}
+  .launch-enter{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:12px;color:#E0CEE8;font:400 10px/1.4 var(--mono);text-transform:uppercase;letter-spacing:.25em}
+  .launch-enter>span{font-size:16px;letter-spacing:0;opacity:.7}
+  .launch-skip{display:flex;align-items:center;gap:12px;font:400 11px/1.5 var(--font);color:#F0E7F2;padding:10px 0;background:none;border:0;border-bottom:1px solid #B89CC866;border-radius:0;cursor:pointer}
+  .launch-skip:hover{color:#fffbed;border-color:#fffbed}
+  .launch-skip:focus-visible{outline:2px solid #e9c879;outline-offset:5px}
+  .launch-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .launch-ceremony[data-state="cutting"]{pointer-events:none}
+  .launch-ceremony[data-state="cutting"] .launch-ribbon-left{animation:launch-release-left .65s cubic-bezier(.3,0,.2,1) forwards}
+  .launch-ceremony[data-state="cutting"] .launch-ribbon-right{animation:launch-release-right .65s cubic-bezier(.3,0,.2,1) forwards}
+  .launch-ceremony[data-state="cutting"] .launch-thread{animation:launch-thread-out .5s ease forwards}
+  .launch-ceremony[data-state="cutting"] .launch-card-heading,.launch-ceremony[data-state="cutting"] .launch-card-caption,.launch-ceremony[data-state="cutting"] .launch-cut-label,.launch-ceremony[data-state="cutting"] .launch-bottom{animation:launch-quiet-out .3s ease forwards}
+  .launch-ceremony[data-state="cutting"] .launch-ribbon{outline:none}
+  .launch-ceremony[data-state="cutting"] .launch-cut-mark{opacity:0}
+  .launch-ceremony[data-state="cutting"] .launch-card{animation:launch-card-out .7s cubic-bezier(.2,.7,.2,1) .45s forwards}
+  .launch-ceremony[data-state="cutting"] .launch-welcome{animation:launch-welcome-in 2.9s ease .4s both}
+  .launch-ceremony[data-state="cutting"] .launch-band{animation:launch-band-out .65s cubic-bezier(.4,0,.2,1) var(--band-delay) forwards}
+  .launch-ceremony[data-state="cutting"] .launch-field{background:transparent}
+  .launch-ceremony[data-state="cutting"] .launch-field::after,.launch-ceremony[data-state="cutting"] .launch-field-light{animation:launch-quiet-out .4s ease forwards}
+  @keyframes launch-light-pass{to{transform:translateX(300%)}}
+  @keyframes launch-release-left{35%{transform:translateX(-8px) rotate(-2deg)}100%{transform:translate(-28px,4px) scaleX(.7);opacity:0}}
+  @keyframes launch-release-right{35%{transform:translateX(8px) rotate(2deg)}100%{transform:translate(28px,-4px) scaleX(.7);opacity:0}}
+  @keyframes launch-thread-out{to{opacity:0;transform:scaleX(.4)}}
+  @keyframes launch-quiet-out{to{opacity:0}}
+  @keyframes launch-card-out{to{opacity:0;transform:scale(.985) translateY(5px)}}
+  @keyframes launch-welcome-in{0%{opacity:0;transform:translateY(8px)}18%,76%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-5px)}}
+  @keyframes launch-band-out{to{opacity:0;transform:scaleY(.96)}}
+  @media(max-width:600px){.launch-card{width:min(100%,360px);min-height:280px;aspect-ratio:1.2}.launch-card-heading{padding-top:32px}.launch-card-caption{padding-bottom:30px}.launch-ribbon{width:40%}.launch-enter{bottom:62px}.launch-bottom{bottom:max(18px,env(safe-area-inset-bottom))}.launch-field-light{animation:none}}
+  @media(max-height:480px){.launch-card{width:min(100%,340px);height:260px;min-height:0;aspect-ratio:auto}.launch-card-heading{padding-top:22px;gap:8px}.launch-card-caption{padding-bottom:20px}.launch-bottom{bottom:10px}.launch-enter{display:none}}
+  @media(prefers-reduced-motion:reduce){.launch-ceremony *{animation:none!important;transition:none!important}.launch-ceremony[data-state="cutting"] .launch-card,.launch-ceremony[data-state="cutting"] .launch-bottom{visibility:hidden}.launch-ceremony[data-state="cutting"] .launch-welcome{opacity:1}}
+</style>
